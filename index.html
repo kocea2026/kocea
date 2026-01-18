@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KOCEA - 기계설비 유지관리자 경력신고</title>
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://kocea2026.github.io/Ko-Genie/">
-    <meta property="og:title" content="기계설비 유지관리자 경력신고">
-    <meta property="og:description" content="Ko-Genie와 함께 간편하게 입력하세요!">
-    <meta property="og:image" content="https://kocea2026.github.io/Ko-Genie/kakao-og-image.png">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;500;700&display=swap" rel="stylesheet">
@@ -30,16 +24,20 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9999; background-color: #000;
             transition: opacity 0.8s ease, transform 0.8s ease;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; /* 중앙 정렬 강화 */
         }
 
+        /* 기존 배경 비디오는 램프 집중을 위해 제거하거나 투명도 조절 */
         #bg-video {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: 0; opacity: 0.6;
+            object-fit: cover; z-index: 0; opacity: 0.2; /* 배경이 필요 없다면 display: none 하세요 */
+            display: none; 
         }
 
         .video-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.3); z-index: 1; pointer-events: none;
+            background: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%); /* 비네팅 효과 */
+            z-index: 1; pointer-events: none;
         }
 
         .webgl {
@@ -48,15 +46,37 @@
         }
 
         .intro-content { 
-            position: absolute; top: 55%; left: 0; width: 100%;
-            text-align: center; color: white; padding: 0 20px; z-index: 100;
-            box-sizing: border-box;
+            /* 기존 absolute 위치 대신 Flexbox 흐름을 따르도록 수정 */
+            position: relative; 
+            z-index: 100;
+            text-align: center; color: white; padding: 0 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 100%; height: 100%;
         }
 
         .intro-content .main-title {
-            font-size: 2.4rem; font-weight: 800; margin-bottom: 50px; color: #ffffff;
+            font-size: 2.2rem; font-weight: 800; 
+            margin-bottom: 20px; /* 램프와의 간격 */
+            color: #ffffff;
             text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9); letter-spacing: -1.5px;
             line-height: 1.4; word-break: keep-all; 
+        }
+
+        /* ★ 램프 동영상 컨테이너 스타일 */
+        .lamp-container {
+            position: relative;
+            width: 300px; /* 램프 크기 조절 */
+            height: 300px;
+            margin-bottom: 30px; /* 버튼과의 간격 */
+            mix-blend-mode: screen; /* 검은 배경을 투명하게 처리하여 자연스럽게 합성 */
+        }
+
+        .lamp-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: absolute;
+            top: 0; left: 0;
         }
 
         .glass-pill-btn {
@@ -68,51 +88,18 @@
             box-shadow: 0 0 20px rgba(138, 43, 226, 0.4), 0 0 40px rgba(0, 154, 218, 0.2);
             transition: all 0.3s ease;
         }
-
-        .glass-pill-btn::after {
-            content: ""; position: absolute; inset: 0; border-radius: 50px; padding: 2px; 
-            background: linear-gradient(90deg, #8A2BE2, #0000FF, #87CEEB); 
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
-        }
-
-        .glass-pill-btn:hover {
-            background: rgba(255, 255, 255, 0.2); transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 0 30px rgba(138, 43, 226, 0.7), 0 0 60px rgba(0, 154, 218, 0.5);
-        }
-
-        /* ★ FERRO 스타일 Footer Credit */
+        
+        /* (버튼 호버 및 기타 스타일 생략 - 위와 동일) */
+        .glass-pill-btn::after { content: ""; position: absolute; inset: 0; border-radius: 50px; padding: 2px; background: linear-gradient(90deg, #8A2BE2, #0000FF, #87CEEB); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+        .glass-pill-btn:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-5px) scale(1.05); box-shadow: 0 0 30px rgba(138, 43, 226, 0.7), 0 0 60px rgba(0, 154, 218, 0.5); }
+        
         .footer-credit {
-            position: absolute; 
-            bottom: 40px; 
-            width: 100%; 
-            text-align: center;
-            z-index: 100;
-            font-family: 'Jura', 'Pretendard', sans-serif; /* 미래지향적 폰트 */
-            font-size: 1.4rem; 
-            font-weight: 500; 
-            letter-spacing: 5px; /* FERRO 로고 특유의 넓은 자간 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px; /* 이모지와 텍스트 사이 간격 */
+            position: absolute; bottom: 40px; width: 100%; text-align: center; z-index: 100;
+            font-family: 'Jura', 'Pretendard', sans-serif; font-size: 1.2rem; font-weight: 500; letter-spacing: 5px;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
         }
-
-        .emoji {
-            font-size: 1.6rem;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
-        }
-
-        .ferro-text {
-            /* 청록색에서 보라색으로 이어지는 네온 그라데이션 */
-            background: linear-gradient(90deg, #00F0FF 0%, #8A2BE2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-transform: uppercase; /* 영문 대문자화 */
-            filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.3));
-        }
-
+        .emoji { font-size: 1.4rem; filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4)); }
+        .ferro-text { background: linear-gradient(90deg, #00F0FF 0%, #8A2BE2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-transform: uppercase; filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.3)); }
         .fade-in-up { opacity: 0; transform: translateY(30px); animation: fadeInUp 1.2s ease forwards; }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -120,9 +107,6 @@
 <body>
 
 <div id="intro-overlay">
-    <video autoplay muted loop playsinline id="bg-video">
-        <source src="intro.mp4" type="video/mp4">
-    </video>
     <div class="video-overlay"></div>
     <canvas class="webgl"></canvas>
 
@@ -130,18 +114,44 @@
         <h2 class="main-title fade-in-up" style="animation-delay: 0.3s;">
             기계설비 유지관리 경력을<br>간편하게 작성하고 출력해보세요
         </h2>
-        <button class="glass-pill-btn fade-in-up" onclick="startApp()" style="animation-delay: 0.6s;">
+
+        <div class="lamp-container fade-in-up" style="animation-delay: 0.5s;">
+            <video id="video1" class="lamp-video" autoplay muted playsinline>
+                <source src="video1.mp4" type="video/mp4">
+            </video>
+            <video id="video2" class="lamp-video" muted playsinline loop style="display: none;">
+                <source src="video2.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <button class="glass-pill-btn fade-in-up" onclick="startApp()" style="animation-delay: 0.8s;">
             시작하기 🚀
         </button>
     </div>
 
-    <div class="footer-credit fade-in-up" style="animation-delay: 1.0s;">
+    <div class="footer-credit fade-in-up" style="animation-delay: 1.2s;">
         <span class="emoji">🛠️</span>
         <span class="ferro-text">MADE BY 회원상담센터</span>
     </div>
 </div>
 
+<script>
+    // ★ 동영상 자동 전환 스크립트
+    document.addEventListener("DOMContentLoaded", function() {
+        const v1 = document.getElementById('video1');
+        const v2 = document.getElementById('video2');
+
+        // 영상 1이 끝나면 실행되는 이벤트 리스너
+        v1.addEventListener('ended', function() {
+            v1.style.display = 'none'; // 영상 1 숨김
+            v2.style.display = 'block'; // 영상 2 표시
+            v2.play(); // 영상 2 재생 (무한 루프)
+        });
+    });
+</script>
+
 <script type="module">
+    // (Three.js 코드는 기존과 동일하게 유지 - 생략 가능하지만 구조 확인을 위해 둠)
     import * as THREE from "three";
     import { FontLoader } from "jsm/loaders/FontLoader.js";
     import { TextGeometry } from "jsm/geometries/TextGeometry.js";
@@ -177,25 +187,18 @@
             textGeometry.center();
             
             const textMaterial = new THREE.MeshPhysicalMaterial({
-                color: 0x0000ff,
-                emissive: 0x0044ff,
-                emissiveIntensity: 2,
-                transparent: true,
-                opacity: 0.8,
-                metalness: 0.8,
-                roughness: 0.2
+                color: 0x0000ff, emissive: 0x0044ff, emissiveIntensity: 2,
+                transparent: true, opacity: 0.8, metalness: 0.8, roughness: 0.2
             });
             
             const text = new THREE.Mesh(textGeometry, textMaterial);
-            text.position.y = 1.8; 
+            // 텍스트 위치를 램프 위로 조정 (기존 1.8 -> 2.5 정도로 올림)
+            text.position.y = 2.5; 
             text.scale.set(1.1, 1, 1);
             scene.add(text);
 
             const wireTextMaterial = new THREE.MeshBasicMaterial({
-                color: 0x88ccff,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.3
+                color: 0x88ccff, wireframe: true, transparent: true, opacity: 0.3
             });
             const wireText = new THREE.Mesh(textGeometry, wireTextMaterial);
             wireText.position.copy(text.position);
@@ -204,6 +207,7 @@
         }
     );
 
+    // Torus 위치도 텍스트와 함께 위로 조정
     const torusGeometry = new THREE.TorusGeometry(1.3, 0.35, 64, 100);
     const torusMaterial = new THREE.MeshPhysicalMaterial({
         color: 0x00ffff, emissive: 0x0088ff, emissiveIntensity: 3,
@@ -214,7 +218,7 @@
     const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0xccffff, wireframe: true, transparent: true, opacity: 0.15 });
     const wireframeTorus = new THREE.Mesh(torusGeometry, wireframeMaterial);
     torus.add(wireframeTorus);
-    torus.position.y = 1.8; 
+    torus.position.y = 2.5; // KOCEA 텍스트와 맞춤
     scene.add(torus);
 
     const clock = new THREE.Clock();
