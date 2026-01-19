@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KOCEA - 기계설비 유지관리자 경력신고</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;500;700&family=Pretendard:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+                "jsm/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #000; font-family: 'Pretendard', sans-serif; }
+        #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background-color: #000; }
+        #bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.5; pointer-events: none; }
+        .webgl { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; outline: none; pointer-events: none; }
+
+        .intro-content {
+            position: relative; z-index: 10; 
+            width: 100%; height: 100dvh; 
+            display: flex; flex-direction: column; 
+            justify-content: space-between; align-items: center;
+            box-sizing: border-box; 
+            padding: 4vh 20px; 
+        }
+
+        .header-zone { flex: 1.5; width: 100%; pointer-events: none; }
+        .main-zone {
+            flex: 2; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+            width: 100%; gap: 4vh; max-height: 55vh; 
+        }
+
+        .glass-banner {
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 30px;
+            padding: 3vh 5vw; text-align: center; width: 85%; max-width: 550px; box-sizing: border-box;
+        }
+
+        .banner-text { color: white; font-size: clamp(1rem, 4.2vw, 1.4rem); line-height: 1.6; font-weight: 500; margin: 0; word-break: keep-all; }
+        .gradient-text { background: linear-gradient(90deg, #4ade80 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; display: inline-block; }
+
+        .glass-pill-btn {
+            width: clamp(200px, 60vw, 280px); padding: 1.5vh 0;
+            font-size: clamp(1rem, 4vw, 1.2rem); border-radius: 50px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
+            color: white; font-weight: bold; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(0, 154, 218, 1); transition: all 0.3s ease;
+        }
+
+        .footer-zone { flex: 0.3; display: flex; justify-content: center; align-items: flex-end; width: 100%; }
+        .footer-credit { font-family: 'Jura', sans-serif; font-size: clamp(0.8rem, 3vw, 1rem); letter-spacing: 2px; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px; }
+        .ferro-text { background: linear-gradient(90deg, #00F0FF 0%, #8A2BE2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .fade-in-up { opacity: 0; transform: translateY(20px); animation: fadeInUp 1s ease forwards; }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="intro-overlay">
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="./intro.mp4" type="video/mp4">
+    </video>
+    <canvas class="webgl"></canvas>
+
+    <div class="intro-content">
+        <div class="header-zone"></div>
+        <div class="main-zone">
+            <div class="glass-banner fade-in-up" style="animation-delay: 0.2s;">
+                <p class="banner-text">
+                    한국건설기술인협회에 오신걸 환영합니다.<br>
+                    이제 기계설비 유지관리 경력을<br>
+                    <span class="gradient-text">"경력확인서 간편 입력기로"</span><br>
+                    빠르게 작성하고 출력해 보세요!
+                </p>
+            </div>
+            <button class="glass-pill-btn fade-in-up" onclick="startApp()" style="animation-delay: 0.4s;">시작하기 🚀</button>
+        </div>
+        <div class="footer-zone fade-in-up" style="animation-delay: 0.6s;">
+            <div class="footer-credit">🛠️ <span class="ferro-text">MADE BY 회원상담센터</span></div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import * as THREE from "three";
+    import { FontLoader } from "jsm/loaders/FontLoader.js";
+    import { TextGeometry } from "jsm/geometries/TextGeometry.js";
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 8);
+
+    const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector(".webgl"), antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2.5); scene.add(ambientLight);
+    const pointLight = new THREE.PointLight(0xffffff, 8); pointLight.position.set(5, 5, 5); scene.add(pointLight);
+
+    const target = new THREE.Vector2();
+    const current = new THREE.Vector2();
+    const group3D = new THREE.Group(); 
+    scene.add(group3D);
+
+    let textGroup = new THREE.Group();
+    let initialTextX = 0;
+
+    // 1. KOCEA 텍스트 생성 (인덱스1-1 스타일: 실체 + 와이어프레임)
+    const fontLoader = new FontLoader();
+    fontLoader.load(
+        "https://raw.githubusercontent.com/danielyl123/person/refs/heads/main/fonts/helvetiker_regular.typeface.json",
+        (font) => {
+            const message = "KOCEA";
+            const letterSpacing = 0.25;
+            let xOffset = 0;
+            Array.from(message).forEach((letter) => {
+                const geometry = new TextGeometry(letter, {
+                    font: font, size: 1.1, depth: 0.25, curveSegments: 8,
+                    bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.03, bevelOffset: 0, bevelSegments: 5,
+                });
+                geometry.computeBoundingBox();
+                const width = geometry.boundingBox.max.x - geometry.boundingBox.min.x;
+                
+                // 실체 메질
+                const material = new THREE.MeshPhysicalMaterial({ color: 0x0000ff, emissive: 0x0044ff, emissiveIntensity: 2, transparent: true, opacity: 0.8, metalness: 0.8, roughness: 0.2 });
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.x = xOffset;
+                textGroup.add(mesh);
+                
+                // [인덱스1-1 효과] 와이어프레임 메쉬 중첩
+                const wireMaterial = new THREE.MeshBasicMaterial({ color: 0x88ccff, wireframe: true, transparent: true, opacity: 0.3 });
+                const wireMesh = new THREE.Mesh(geometry, wireMaterial);
+                wireMesh.position.x = xOffset;
+                textGroup.add(wireMesh);
+
+                xOffset += (width + letterSpacing);
+            });
+            initialTextX = - (xOffset - letterSpacing) / 2;
+            textGroup.position.set(initialTextX, 0, 0); 
+            group3D.add(textGroup);
+        }
+    );
+
+    // 2. 도넛(토러스) 생성
+    const torusGeometry = new THREE.TorusGeometry(1.7, 0.4, 25, 100);
+    const torusMaterial = new THREE.MeshPhysicalMaterial({ 
+        color: 0x00F0FF, emissive: 0x0099DA, emissiveIntensity: 3.5, 
+        transparent: true, opacity: 0.4, metalness: 0.9, roughness: 0.1, side: THREE.DoubleSide 
+    });
+    const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+    
+    // 와이어프레임 토러스 중첩
+    const wireframeTorus = new THREE.Mesh(torusGeometry, new THREE.MeshBasicMaterial({ color: 0xccffff, wireframe: true, transparent: true, opacity: 0.15 }));
+    torus.add(wireframeTorus);
+    group3D.add(torus);
+
+    // 3. test_v5 기반 반응형 크기 조절 로직
+    const updateScale = () => {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        let scale = 1.0;
+        if (width < 500) {
+            scale = width / 550; 
+        }
+        group3D.scale.set(scale, scale, scale);
+        
+        const yPos = height > 800 ? 3.2 : 2.8; 
+        group3D.position.y = yPos;
+
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+    };
+
+    window.addEventListener("resize", updateScale);
+    updateScale();
+
+    // 입력 이벤트 (마우스 및 자이로)
+    const handleMove = (x, y) => {
+        target.x = (x / window.innerWidth) - 0.5;
+        target.y = (y / window.innerHeight) - 0.5;
+    };
+    window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+    window.addEventListener('deviceorientation', (e) => {
+        if (e.beta !== null && e.gamma !== null) {
+            const x = (e.gamma + 30) / 60 * window.innerWidth;
+            const y = (e.beta - 30) / 60 * window.innerHeight;
+            handleMove(x, y);
+        }
+    });
+    
+    const clock = new THREE.Clock();
+    const tick = () => {
+        const elapsedTime = clock.getElapsedTime();
+        current.x += (target.x - current.x) * 0.05;
+        current.y += (target.y - current.y) * 0.05;
+
+        // 도넛 애니메이션
+        torus.rotation.x = elapsedTime * 0.5;
+        torus.rotation.y = elapsedTime * 0.4;
+        torusMaterial.emissiveIntensity = 2.5 + Math.sin(elapsedTime * 2) * 1;
+        
+        // 그룹 및 텍스트 반응형 움직임 (인덱스1-1의 회전 효과 포함)
+        group3D.position.x = current.x * 2;
+        const basePadding = window.innerHeight > 800 ? 3.2 : 2.8;
+        group3D.position.y = basePadding + (-current.y * 1.5);
+
+        if (textGroup) {
+            // [인덱스1-1 효과] 마우스 위치에 따른 텍스트의 미세한 X/Y축 회전
+            textGroup.rotation.y = current.x * 0.3;
+            textGroup.rotation.x = current.y * 0.3;
+        }
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+    };
+    tick();
+
+    window.startApp = function() {
+        const intro = document.getElementById('intro-overlay');
+        intro.style.transition = 'opacity 0.6s';
+        intro.style.opacity = '0';
+        setTimeout(() => { window.location.href = './main.html'; }, 600);
+    };
+</script>
+</body>
+</html>
