@@ -2,53 +2,82 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>기계설비 유지관리자 경력확인서 (최종 완성)</title>
+<meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>기계설비 유지관리자 경력확인서 (최종 수정)</title>
 <style>
     /* --- [1. 기본 레이아웃 설정] --- */
     :root {
-        --base-width: 210mm; 
-        --base-height: 297mm; 
+        --base-width: 210mm; /* A4 너비 */
+        --base-height: 297mm; /* A4 높이 */
+        --nav-height: 80px;
         --content-bg: #555;
-        --nav-height-pc: 70px;
-        --nav-height-mobile: 50px;
     }
 
-    body { 
-        background-color: var(--content-bg); 
-        margin: 0; padding: 0; 
-        font-family: 'Malgun Gothic', 'Dotum', sans-serif; 
-        overflow: hidden; /* 스크롤 방지 */
+    body {
+        background-color: var(--content-bg);
+        margin: 0; padding: 0;
+        font-family: 'Malgun Gothic', 'Dotum', sans-serif;
         width: 100vw; height: 100vh;
-        display: flex; flex-direction: column; align-items: center;
-        padding-top: var(--nav-height-pc); 
+        /* 기본: 중앙 정렬 & 스크롤 방지 (PC/모바일 세로) */
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        overflow: hidden;
+        box-sizing: border-box;
     }
 
-    /* --- [2. 상단 고정 내비게이션 바] --- */
+    /* --- [2. 상단 내비게이션 바] --- */
     .top-nav {
-        position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height-pc); z-index: 9999;
-        display: flex; align-items: center; justify-content: center; gap: 15px;
-        background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        height: var(--nav-height);
+        display: flex; align-items: center; justify-content: center;
+        background: transparent;
+        pointer-events: none;
+        flex-shrink: 0;
     }
 
+    .nav-inner {
+        width: 90%;
+        height: 100%;
+        padding: 15px 0;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        pointer-events: auto;
+        box-sizing: border-box;
+    }
+
+    /* --- [버튼 스타일] --- */
     .nav-btn {
-        padding: 8px 16px; font-size: 14px; font-weight: bold; color: white;
-        border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 8px; cursor: pointer;
-        display: flex; align-items: center; justify-content: center; gap: 5px; white-space: nowrap;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.1s;
+        padding: 0;
+        font-size: 15px; font-weight: bold; color: white;
+        width: 100%; height: 100%; max-height: 50px;
+        align-self: center;
+        border-radius: 12px; cursor: pointer;
+        display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        transition: transform 0.1s ease, box-shadow 0.2s ease;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
-    .nav-btn:active { transform: scale(0.95); }
+    .nav-btn span { display: inline-block; }
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        border-color: rgba(255, 255, 255, 0.7);
+    }
+    .nav-btn:active { transform: scale(0.97); }
 
-    .btn-orange { background: rgba(255, 140, 0, 0.7); }
-    .btn-blue   { background: rgba(41, 128, 185, 0.6); }
-    .btn-green  { background: rgba(39, 174, 96, 0.6); }
-    .btn-pink   { background: rgba(255, 105, 180, 0.6); }
-    .btn-red    { background: rgba(192, 57, 43, 0.6); }
+    .btn-orange { background: rgba(255, 140, 0, 0.4); } .btn-orange:hover { background: rgba(255, 140, 0, 0.6); }
+    .btn-blue   { background: rgba(41, 128, 185, 0.4); } .btn-blue:hover { background: rgba(41, 128, 185, 0.6); }
+    .btn-green  { background: rgba(39, 174, 96, 0.4); }  .btn-green:hover { background: rgba(39, 174, 96, 0.6); }
+    .btn-pink   { background: rgba(255, 105, 180, 0.4); } .btn-pink:hover { background: rgba(255, 105, 180, 0.6); }
+    .btn-red    { background: rgba(192, 57, 43, 0.4); }    .btn-red:hover { background: rgba(192, 57, 43, 0.6); }
 
     /* --- [3. 계산기 패널] --- */
     .calc-panel {
-        position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9998;
+        position: fixed; top: var(--nav-height); margin-top: 10px;
+        left: 50%; transform: translateX(-50%); z-index: 9998;
         display: none; flex-direction: column; gap: 10px; padding: 15px 20px; width: 200px;
         background: rgba(255, 140, 0, 0.95); border: 1px solid rgba(255, 255, 255, 0.4);
         border-radius: 16px; backdrop-filter: blur(10px); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); color: white;
@@ -63,13 +92,29 @@
 
     /* --- [4. 반응형 래퍼] --- */
     #responsive-wrapper {
-        width: var(--base-width); height: var(--base-height);
-        transform-origin: top center; transition: transform 0.2s ease;
-        margin-top: 10px; background-color: white; box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        width: 794px; /* A4 기준 너비 고정 */
+        height: auto;
+        display: flex; flex-direction: column;
+        transform-origin: top center;
+        transition: transform 0.1s linear;
+        background-color: transparent;
     }
+
+    /* 커스텀 줌 적용 대상(모바일 세로에서만 활성화) */
+    #zoom-container {
+        transform-origin: top center;
+        will-change: transform;
+    }
+
+    /* 줌 활성일 때만 제스처를 우리가 받도록(브라우저 기본 제스처 차단) */
+    body.zoom-enabled #zoom-container {
+        touch-action: none;
+    }
+
     .page-container {
-        background-color: white; width: 100%; height: 100%; padding: 10mm 15mm;
+        background-color: white; width: 100%; height: var(--base-height); padding: 10mm 15mm;
         box-sizing: border-box; position: relative; display: flex; flex-direction: column;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
     }
 
     /* --- [5. 테이블 및 입력 필드 스타일] --- */
@@ -80,7 +125,7 @@
     th { background-color: #e6e6e6; text-align: center; font-weight: normal; letter-spacing: -0.5px; }
     .border-top-thick { border-top: 2px solid #000 !important; }
     .border-bottom-thick { border-bottom: 2px solid #000 !important; }
-    
+
     input, textarea, select {
         width: 100%; height: 100%; border: none; padding: 0; margin: 0;
         font-family: inherit; font-size: 8.5pt;
@@ -88,155 +133,129 @@
         vertical-align: middle; color: #000; -webkit-appearance: none; border-radius: 0;
     }
     select {
-        padding-right: 15px; 
+        padding-right: 15px;
         background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M0 0 L5 5 L10 0' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 2px center;
         background-size: 8px;
     }
     input:focus, textarea:focus, select:focus { background-color: #e8f0fe; }
     input:disabled, select:disabled { background-color: #f0f0f0; color: #aaa; cursor: not-allowed; }
-    
-    /* 필수값 미입력 시 빨간 테두리 */
+
     .required-missing { border: 2px solid #ff3333 !important; background-color: rgba(255, 51, 51, 0.05) !important; border-radius: 3px; }
-    
     .center-text { text-align: center; }
     .left-text { text-align: left !important; padding-left: 5px; }
     .long-label { font-size: 7pt; letter-spacing: -0.8px; line-height: 1.1; }
     .nowrap-text { white-space: nowrap; }
 
-    /* ★★★ [날짜 입력 필드 디자인 핵심] ★★★ */
-    /* 기본 상태: 글자 투명, 돋보기 표시 */
-    input[type="date"] { 
-        position: relative; text-align: center; color: transparent; padding: 0; cursor: pointer;
-    }
-    /* 크롬/엣지용 실제 텍스트 숨김 처리 */
+    input[type="date"] { position: relative; text-align: center; color: transparent; padding: 0; cursor: pointer; }
     input[type="date"]::-webkit-datetime-edit { color: transparent; }
-    
-    /* 포커스 되거나 유효한 값(required 충족)이 있을 때만 글자 보이기 */
-    input[type="date"]:focus, 
-    input[type="date"]:valid { 
-        color: #000; 
-    }
-    input[type="date"]:focus::-webkit-datetime-edit, 
-    input[type="date"]:valid::-webkit-datetime-edit { 
-        color: #000; 
-    }
-
-    /* 돋보기 아이콘 스타일 */
-    input[type="date"]::-webkit-calendar-picker-indicator { 
-        position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; cursor: pointer; 
+    input[type="date"]:focus, input[type="date"]:valid { color: #000; }
+    input[type="date"]:focus::-webkit-datetime-edit, input[type="date"]:valid::-webkit-datetime-edit { color: #000; }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; cursor: pointer;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23555555'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");
         background-position: center; background-repeat: no-repeat; background-size: contain; width: 14px; height: 14px; opacity: 0.7; margin-left: 2px;
     }
-    /* 값이 선택되면(valid) 돋보기 숨김 -> 날짜만 보이게 */
     input[type="date"]:valid::-webkit-calendar-picker-indicator { background-image: none !important; opacity: 0; }
 
-    /* 툴팁 */
+    /* --- [툴팁 스타일] --- */
+    .tooltip-container { position: relative; }
     .custom-tooltip {
         position: absolute; z-index: 1000; pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
-        padding: 8px 12px; border-radius: 8px; font-size: 8pt; white-space: nowrap; font-weight: bold;
+        top: 100%; left: 0; width: 100%; box-sizing: border-box; margin-top: 2px;
+        padding: 6px 8px; border-radius: 4px; font-size: 8.5pt; font-weight: bold; white-space: normal; line-height: 1.4;
         background-color: #222; color: white; border: 2px solid transparent;
         background-image: linear-gradient(#222, #222), linear-gradient(135deg, #ff00cc, #3333ff, #00ccff);
         background-origin: border-box; background-clip: padding-box, border-box;
-        box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
     .custom-tooltip.show { opacity: 1; }
-    .tooltip-container { position: relative; }
 
     .footer-wrapper { margin-top: auto; display: flex; flex-direction: column; justify-content: flex-end; }
-    
-    /* ★★★ [재직 체크박스 커스텀] ★★★ */
-    .working-check-label {
-        display: inline-flex; align-items: center; cursor: pointer; margin-left: 5px; font-size: 9pt;
-    }
-    /* 실제 체크박스 숨기고 커스텀 박스 생성 */
+    .working-check-label { display: inline-flex; align-items: center; cursor: pointer; margin-left: 5px; font-size: 9pt; }
     .working-check-label input {
-        appearance: none; -webkit-appearance: none;
-        width: 14px; height: 14px;
-        background-color: #fff;
-        border: 1px solid #000; /* 검은 테두리 */
-        margin-right: 4px;
-        position: relative;
-        cursor: pointer;
-        border-radius: 0;
+        appearance: none; -webkit-appearance: none; width: 14px; height: 14px;
+        background-color: #fff; border: 1px solid #000; margin-right: 4px; position: relative;
+        cursor: pointer; border-radius: 0;
     }
-    /* 체크 시 '✔' 표시 */
     .working-check-label input:checked::after {
-        content: '✔';
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 12px;
-        color: black;
-        font-weight: bold;
-        line-height: 1;
+        content: '✔'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        font-size: 12px; color: black; font-weight: bold; line-height: 1;
     }
 
-    /* --- [6. 미디어 쿼리 (모바일 화면 최적화)] --- */
-    @media screen and (max-width: 768px) {
-        body { padding-top: var(--nav-height-mobile); justify-content: flex-start; }
-        
-        .top-nav { 
-            height: var(--nav-height-mobile); padding: 0 2px; gap: 2px;
-            display: grid; grid-template-columns: repeat(5, 1fr); 
-        }
-        
-        .nav-btn { 
-            padding: 2px 0; font-size: 9.5px; letter-spacing: -0.5px; word-break: keep-all;
-            width: 100%; height: 40px; border-radius: 6px; flex-direction: column; gap: 1px;
-        }
+    /* --- [6. Mobile & Landscape 구분 스타일] --- */
+    body.mobile-mode .calc-panel { top: 65px; width: 90%; }
+    body.mobile-mode .calc-toggle { display: flex; }
 
-        .calc-panel { top: 55px; width: 90%; }
-        .calc-toggle { display: flex; }
-        #responsive-wrapper { margin-top: 5px; }
+    /* [Case 1 전용] 모바일 가로 모드 (Landscape) */
+    @media screen and (orientation: landscape) and (max-height: 600px) {
+        .top-nav { height: 50px; }
+        .nav-inner { width: 98vw; padding: 5px 0; gap: 8px; margin: 0 auto; }
+        .nav-btn { flex-direction: row; font-size: 11px; height: 40px; gap: 5px; }
     }
 
     /* --- [7. 인쇄 모드 설정] --- */
     @media print {
-        /* ★★★ 브라우저 출력 문구(날짜, URL 등) 제거 ★★★ */
         @page { size: A4; margin: 0; }
-        
         body { background: white; padding: 0; margin: 0; height: 100%; overflow: visible; display: block; }
         .top-nav, .calc-panel, .custom-tooltip { display: none !important; }
-        
-        #responsive-wrapper { 
-            transform: none !important; width: 100% !important; height: auto !important; margin: 0 !important; box-shadow: none !important; 
-        }
-        .page-container { 
-            border: none; width: 100%; height: 297mm; 
-            /* 여백을 패딩으로 확보 */
-            padding: 10mm 15mm; 
-        }
-        
+        #responsive-wrapper { transform: none !important; width: 100% !important; height: auto !important; margin: 0 !important; box-shadow: none !important; }
+        #zoom-container { transform: none !important; }
+        .page-container { border: none; width: 100%; height: 297mm; padding: 10mm 15mm; }
         .footer-wrapper { margin-top: auto !important; }
         input, textarea, select { background: transparent !important; }
-        
-        .empty-value { color: transparent !important; } 
+        .empty-value { color: transparent !important; }
         select { background-image: none; padding-right: 0; }
-        
-        /* 날짜 필드 인쇄 시 돋보기 숨김 */
-        input[type="date"] { color: transparent; } 
-        input[type="date"]:valid { color: #000; }
+        input[type="date"] { color: transparent; } input[type="date"]:valid { color: #000; }
         input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }
-        
         .required-missing { border: none !important; background-color: transparent !important; }
-        
-        /* 인쇄 시 재직 버튼/안내문구 숨김 */
         .working-check-label { display: none !important; }
         ::placeholder { color: transparent !important; }
     }
+
+    /* --- [8. 애니메이션 효과 (흔들림)] --- */
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+    .shake-effect {
+        animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        border: 2px solid #ff3333 !important;
+}
+   /* --- [9. 포커스 시각화 (무빙 그라디언트)] --- */
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .focus-ring-active {
+        /* 테두리 영역 확보 (투명) */
+        border: 2px solid transparent !important;
+        border-radius: 3px;
+        
+        /* [핵심] 2중 배경: 안쪽은 흰색, 바깥쪽은 그라디언트 */
+        background-image: linear-gradient(#fff, #fff), 
+                          linear-gradient(270deg, #ff00cc, #3333ff, #00ccff, #ff00cc);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        
+        /* 그라디언트 크기를 키워서 움직이는 효과 연출 */
+        background-size: 100% 100%, 400% 400%;
+        
+        /* 애니메이션 실행 (3초 간격 무한 반복) */
+        animation: gradientMove 3s ease infinite;
+        
+        /* 레이아웃 보정: 테두리만큼 줄어드는 것 방지 및 강조 */
+        box-shadow: 0 0 10px rgba(51, 51, 255, 0.4);
+        z-index: 10;
+        position: relative;
+ }
 </style>
 </head>
-<body onload="initAllFields(); resizeForm();" onresize="resizeForm()">
+<body onload="initAllFields();" onresize="resizeForm()">
 
 <input type="file" id="file_input" style="display:none" accept=".json" onchange="loadFromFile(this)">
-
-<nav class="top-nav">
-    <button class="nav-btn btn-orange" onclick="toggleCalcPanel()">📅 참여기간 계산기</button>
-    <button class="nav-btn btn-blue" onclick="saveToFile()">💾 저장</button>
-    <button class="nav-btn btn-green" onclick="triggerFileLoad()">📂 열기</button>
-    <button class="nav-btn btn-pink" onclick="validateAndPrint()">🖨️ 인쇄</button>
-    <button class="nav-btn btn-red" onclick="if(confirm('내용을 초기화 하시겠습니까?')) location.reload();">🔄 초기화</button>
-</nav>
 
 <div class="calc-panel" id="calcPanel">
     <div class="calc-toggle" onclick="document.getElementById('calcPanel').classList.toggle('collapsed')">◀</div>
@@ -252,397 +271,485 @@
 </div>
 
 <div id="responsive-wrapper">
-    <div class="page-container">
-        <div style="font-size: 8pt; margin-bottom: 15px; font-weight:bold;">
-            ■ 건설기술 진흥법 시행규칙 [별지 제12호서식] &lt;개정 2024. 4. 23.&gt;
-        </div>
-
-        <div style="position: relative; height: 60px; margin-bottom: 20px;">
-            <h1 style="position: absolute; width: 100%; top: 60%; transform: translateY(-50%); text-align: center; font-size: 20pt; letter-spacing: 5px; margin: 0; padding-right: 150px; box-sizing: border-box;">
-                경력확인서
-            </h1>
-            <table style="width: 180px; position: absolute; top: -20px; right: 0; border: 2px solid black; height: 40px;">
-                <colgroup><col style="width: 40%"><col style="width: 40%"><col style="width: 40%"></colgroup>
-                <tr>
-                    <th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">구분</th>
-                    <th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">인사부서</th>
-                    <th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">사업부서</th>
-                </tr>
-                <tr>
-                    <th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">부서명</th>
-                    <td style="height:7px;"></td> <td style="height:7px;"></td>
-                </tr>
-                <tr>
-                    <th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">담당자</th>
-                    <td style="text-align:right; vertical-align:bottom; font-size:7pt; padding:0 2px; height:7px;">(인)</td>
-                    <td style="text-align:right; vertical-align:bottom; font-size:7pt; padding:0 2px; height:7px;">(인)</td>
-                </tr>
-                <tr>
-                    <th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">연락처</th>
-                    <td style="height:7px;"></td> <td style="height:7px;"></td>
-                </tr>
-                <tr>
-                    <th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">발급번호</th>
-                    <td colspan="2" style="height:7px;"></td>
-                </tr>
-            </table>
-        </div>
-
-        <table class="border-top-thick no-side-outer" style="margin-bottom: 10px;">
-            <colgroup>
-                <col style="width: 10%;"> <col style="width: 10%;"> <col style="width: 20%;"> 
-                <col style="width: 12%;"> <col style="width: 18%;"> <col style="width: 13%;"> <col style="width: 17%;">
-            </colgroup>
-            <tr>
-                <th rowspan="2">인적<br>사항</th>
-                <th>① 성 명</th>
-                <td>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <input type="text" id="user_name" style="width:60%;">
-                        <span class="nowrap-text" style="font-size:7pt; color:#888;">(서명 또는 인)</span>
-                    </div>
-                </td>
-                <th>주민등록번호</th>
-                <td><input type="text" id="user_id" class="center-text" oninput="formatNumber(this, 'id')"></td>
-                <th class="long-label">휴대전화번호<br>(전화번호)</th>
-                <td><input type="tel" id="user_phone" class="center-text" oninput="formatCompPhone(this)" maxlength="12"></td>
-            </tr>
-            <tr>
-                <th>② 주 소</th>
-                <td colspan="3"><input type="text" id="user_addr" oninput="autoFitText(this)"></td>
-                <th>전자우편주소</th>
-                <td><input type="email" id="user_email"></td>
-            </tr>
-        </table>
-        
-        <table class="no-side-outer">
-            <colgroup>
-                <col style="width: 10%;"> <col style="width: 10%;"> <col style="width: 20%;"> 
-                <col style="width: 12%;"> <col style="width: 18%;"> <col style="width: 13%;"> <col style="width: 17%;">
-            </colgroup>
-            <tr class="border-top-thick">
-                <th rowspan="3">소속<br>회사</th>
-                <th colspan="2">③ 회사명 및 대표자</th>
-                <td colspan="2"><input type="text" id="comp_name" oninput="autoFitText(this)"></td>
-                <th class="long-label" style="font-size:7pt;">사업자등록번호<br>(법인등록번호)</th>
-                <td><input type="text" id="comp_biz" class="center-text" oninput="formatNumber(this, 'biz')"></td>
-            </tr>
-            <tr>
-                <th colspan="2">영업소 소재지</th>
-                <td colspan="2"><input type="text" id="comp_addr" oninput="autoFitText(this)"></td>
-                <th class="long-label">④ 건설업종<br>(등록번호)</th>
-                <td><input type="text" id="comp_sector"></td>
-            </tr>
-            <tr>
-                <td colspan="4" style="padding:0; border-right:1px solid #000;">
-                    <div style="display:flex; height:100%; width:100%;">
-                        <div style="flex:1; border-right:1px solid #000; background:#e6e6e6; display:flex; align-items:center; justify-content:center; font-size:8.5pt;">⑤ 입사일</div>
-                        <div style="flex:1; border-right:1px solid #000; padding:0 2px;"><input type="date" id="join_date" required onchange="validateAllDates(1); validateAllDates(2);" onkeydown="return false;"></div>
-                        <div style="flex:1; border-right:1px solid #000; background:#e6e6e6; display:flex; align-items:center; justify-content:center; font-size:8.5pt;">⑥ 퇴사일</div>
-                        <div style="flex:1; padding:0 2px; display:flex; align-items:center; justify-content:center;">
-                            <input type="date" id="retire_date" required style="width: 100%;" onchange="validateAllDates(1); validateAllDates(2);" onkeydown="return false;">
-                            <div id="retire_text" style="display:none; width:100%; text-align:center; font-size:8.5pt;">재직중</div>
-                            <label class="working-check-label" title="현재 근무 중이면 체크하세요">
-                                <input type="checkbox" id="chk_working" onchange="toggleRetireDate()">재직
-                            </label>
-                        </div>
-                    </div>
-                </td>
-                <th>전화번호</th>
-                <td><input type="tel" id="comp_phone" class="center-text" oninput="formatCompPhone(this)" maxlength="12"></td>
-            </tr>
-        </table>
-
-        <div style="text-align:center; font-weight:bold; background:#eaeaea; border:1px solid #000; border-bottom:none; border-left:none; border-right:none; margin-top:5px; height:24px; line-height:24px; font-size:9pt;" class="border-top-thick">
-            기 술 경 력
-        </div>
-
-        <table class="border-bottom-thick no-side-outer">
-            <colgroup>
-                <col style="width: 4%;"> <col style="width: 24%;"> <col style="width: 24%;"> <col style="width: 24%;"> <col style="width: 24%;">
-            </colgroup>
-            <tr>
-                <th rowspan="5" class="border-bottom-thick">연<br>번</th>
-                <th class="left-text">⑦ 사업기간(착공~준공)</th>
-                <th colspan="3" class="left-text">⑨ 참여사업명</th>
-            </tr>
-            <tr>
-                <th class="left-text">⑧ 참여기간(시작~종료)</th>
-                <th colspan="3" class="left-text">⑩ 발주자(청)</th>
-            </tr>
-            <tr>
-                <td colspan="4" style="padding:0; border:none;">
-                    <table style="width:100%; border:none;">
-                        <colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup>
-                        <tr>
-                            <th class="left-text" style="border-left:none; border-top:none;">⑪ 공사종류</th>
-                            <th class="left-text" style="border-top:none;">⑫ 공사(용역)금액(백만원)</th>
-                            <th class="left-text" style="border-top:none;">⑬ 직무분야</th>
-                            <th class="left-text" style="border-top:none; border-right:none;">⑭ 전문분야</th>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4" style="padding:0; border:none;">
-                    <table style="width:100%; border:none;"style="width:100%; border-collapse: collapse; table-layout: fixed; border: 1px solid #ccc;">        
-                        <colgroup><col style="width:50%;"><col style="width:18%;"><col style="width:7%;"><col style="width:25%;"></colgroup>
-                        <tr>
-                            <th class="left-text" style="border-left:none; border-top:none;">⑮ 공사(용역)개요(150자 이내 빈칸 포함)</th>
-                            <th class="left-text" style="border-top:none;">⑯ 담당업무</th>
-                            <th class="left-text" style="border-top:none; font-size: 6.5pt; letter-spacing: -0.5px; padding: 0; line-height: 24px; text-align:center; white-space:nowrap;">⑰ 책임정도</th>
-                            <th class="left-text" style="border-top:none; border-right:none;">⑱ 직위</th>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4" style="padding:0; border:none;">
-                    <table style="width:100%; border:none;">
-                        <colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup>
-                        <tr>
-                            <th class="left-text" style="border-left:none; border-top:none; border-bottom:1px solid black;">⑲ 적용 공법</th>
-                            <th class="left-text" style="border-top:none; border-bottom:1px solid black;">⑳ 적용 융ㆍ복합건설기술</th>
-                            <th class="left-text" style="border-top:none; border-bottom:1px solid black;">㉑ 적용 신기술 등</th>
-                            <th class="left-text" style="border-top:none; border-bottom:1px solid black; border-right:none;">㉒ 시설물 종류</th>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr>
-                <th rowspan="5" class="border-bottom-thick" style="background:#fff;">1</th>
-                <td style="background-color: #f0f0f0 !important; cursor: not-allowed;"></td>
-                <td colspan="3" class="tooltip-container">
-                    <input type="text" id="proj_name_1" class="left-text e1-req" placeholder="※ 클릭하여 예시를 확인해 주세요!" onfocus="showTooltip(this)" onblur="hideTooltip(this)" oninput="checkEntry1(); checkHeadquarters(1)">
-                    <div class="custom-tooltip" id="tooltip_proj_name_1">(예시) 00아파트 기계설비 유지관리, 00건물 기계설비 유지관리, 00빌딩 기계설비 유지관리, 00대학교 기계설비 유지관리</div>
-                </td>
-            </tr>
-            <tr>
-                <td><div style="display:flex;">
-                    <input type="date" id="part_start_1" required class="e1-req" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(1)" oninput="checkEntry1()">~
-                    <input type="date" id="part_end_1" required class="e1-req" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(1)" oninput="checkEntry1()">
-                </div></td>
-                <td colspan="3" style="cursor: not-allowed;"><input type="text" class="left-text" disabled style="cursor: not-allowed;"></td>
-            </tr>
-            <tr>
-                <td colspan="4" style="padding:0; border:none;">
-                    <table style="width:100%; border:none;">
-                        <colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup>
-                        <tr>
-                            <td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none;"><input type="text" class="left-text" id="amt_1" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none; text-align: center;">기계</td>
-                            <td style="border-top:none; border-right:none; padding-left: 0;">
-                                <select id="spec1" class="left-text e1-req" onchange="checkSelectPlaceholder(this); checkEntry1();">
-                                    <option value="">선택</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4" style="padding:0; border:none;">
-                    <table style="width:100%; border:none;">
-                        <colgroup><col style="width:50%;"><col style="width:18%;"><col style="width:7%;"><col style="width:25%;"></colgroup>
-                        <tr>
-                            <td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none;">
-                                <select id="task1" class="left-text e1-req" style="font-size: 8pt;" onchange="updateResponsibility(1); checkEntry1(); checkSelectPlaceholder(this);">
-                                    <option value="">선택</option>
-                                </select>
-                            </td>
-                            <td style="border-top:none; padding-right: 0;"><input type="text" id="resp1" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none; border-right:none; padding-left: 0;"><input type="text" id="pos_1" class="left-text e1-req" oninput="checkEntry1()"></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4" style="padding:0; border:none;">
-                    <table style="width:100%; border:none;">
-                        <colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup>
-                        <tr>
-                            <td style="border-left:none; border-top:none; border-bottom:2px solid black;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none; border-bottom:2px solid black;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none; border-bottom:2px solid black;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none; border-bottom:2px solid black; border-right:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr class="entry2-row">
-                <th rowspan="5" style="background:#fff;">2</th>
-                <td style="background-color: #f0f0f0 !important; cursor: not-allowed;"></td>
-                
-                <td colspan="3" class="tooltip-container e2-all">
-                    <input type="text" id="proj_name_2" class="left-text e2-req e2-all" placeholder="※ 클릭하여 예시를 확인해 주세요!" onfocus="showTooltip(this)" onblur="hideTooltip(this)" oninput="checkHeadquarters(2); checkEntry2();" disabled>
-                    <div class="custom-tooltip e2-all" id="tooltip_proj_name_2" style="display: none;">(예시) 00아파트 기계설비 유지관리, 00건물 기계설비 유지관리, 00빌딩 기계설비 유지관리, 00대학교 기계설비 유지관리</div>
-                </td>
-            </tr>
-            <tr class="entry2-row">
-                <td><div style="display:flex;">
-                    <input type="date" id="part_start_2" required class="e2-req e2-all" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(2); checkEntry2();" disabled>~
-                    <input type="date" id="part_end_2" required class="e2-req e2-all" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(2); checkEntry2();" disabled>
-                </div></td>
-                <td colspan="3" style="cursor: not-allowed;"><input type="text" class="left-text" disabled style="cursor: not-allowed;"></td>
-            </tr>
-            <tr class="entry2-row">
-                <td colspan="4" style="padding:0; border:none;">
-                    <table style="width:100%; border:none;">
-                        <colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup>
-                        <tr>
-                            <td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none; text-align: center;">기계</td>
-                            <td style="border-top:none; border-right:none; padding-left: 0;">
-                                <select id="spec2" class="left-text e2-req e2-all" onchange="checkSelectPlaceholder(this); checkEntry1(); checkEntry2();" disabled>
-                                    <option value="">직무분야 선택 필요</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr class="entry2-row">
-                <td colspan="4" style="padding:0; border:none;">
-                    <table style="width:100%; border:none;">
-                        <colgroup><col style="width:50%;"><col style="width:18%;"><col style="width:7%;"><col style="width:25%;"></colgroup>
-                        <tr>
-                            <td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none;">
-                                <select id="task2" class="left-text e2-req e2-all" style="font-size: 8pt;" onchange="updateResponsibility(2); checkSelectPlaceholder(this); checkEntry2();" disabled>
-                                    <option value="">선택</option>
-                                </select>
-                            </td>
-                            <td style="border-top:none; padding-right: 0;"><input type="text" id="resp2" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none; border-right:none; padding-left: 0;"><input type="text" id="pos_2" class="left-text e2-req e2-all" oninput="checkEntry2()" disabled></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr class="entry2-row">
-                <td colspan="4" style="padding:0; border:none;">
-                    <table style="width:100%; border:none;">
-                        <colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup>
-                        <tr>
-                            <td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                            <td style="border-top:none; border-right:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-
-        <div class="footer-wrapper">
-            <div style="margin-top: 10px; display:flex; justify-content:space-between; align-items:flex-end;">
-                <span style="font-size: 10pt; margin-left:5px;">위와 같이 건설기술인의 경력을 확인합니다.</span>
-                <span style="font-size: 10pt; margin-right:5px;">
-                    <input type="tel" style="width:40px; text-align:right;" placeholder="202X">년
-                    <input type="tel" style="width:30px; text-align:right;" placeholder="00">월
-                    <input type="tel" style="width:30px; text-align:right;" placeholder="00">일
-                </span>
+    <!-- ★ 커스텀 줌/팬 적용 레이어 -->
+    <div id="zoom-container">
+        <nav class="top-nav">
+            <div class="nav-inner">
+                <button class="nav-btn btn-orange" onclick="toggleCalcPanel()">
+                    <span>📅</span><span>참여기간</span>
+                </button>
+                <button class="nav-btn btn-blue" onclick="saveToFile()">
+                    <span>💾</span><span>저장</span>
+                </button>
+                <button class="nav-btn btn-green" onclick="triggerFileLoad()">
+                    <span>📂</span><span>열기</span>
+                </button>
+                <button class="nav-btn btn-pink" onclick="validateAndPrint()">
+                    <span>🖨️</span><span>인쇄</span>
+                </button>
+                <button class="nav-btn btn-red" onclick="if(confirm('내용을 초기화 하시겠습니까?')) location.reload();">
+                    <span>🔄</span><span>초기화</span>
+                </button>
             </div>
-            
-            <div style="position:relative; width:100%; height:50px; text-align:center; margin-top:20px;">
-                <span style="font-size: 16pt; font-weight: bold; letter-spacing: -1px;">
-                    발주자, 인ㆍ허가기관 또는 사용자(대표자)
-                </span>
-                <div style="position:absolute; right:80px; top:-10px; width:50px; height:50px; display:flex; align-items:center; justify-content:center; color:red; font-weight:bold; border:2px solid red; font-size:10pt;">
-                    직인
+        </nav>
+
+        <div class="page-container">
+            <div style="font-size: 8pt; margin-bottom: 15px; font-weight:bold;">
+                ■ 건설기술 진흥법 시행규칙 [별지 제12호서식] &lt;개정 2024. 4. 23.&gt;
+            </div>
+            <div style="position: relative; height: 60px; margin-bottom: 20px;">
+                <h1 style="position: absolute; width: 100%; top: 60%; transform: translateY(-50%); text-align: center; font-size: 20pt; letter-spacing: 5px; margin: 0; padding-right: 150px; box-sizing: border-box;">경력확인서</h1>
+                <table style="width: 180px; position: absolute; top: -20px; right: 0; border: 2px solid black; height: 40px;">
+                    <colgroup><col style="width: 40%"><col style="width: 40%"><col style="width: 40%"></colgroup>
+                    <tr><th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">구분</th><th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">인사부서</th><th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">사업부서</th></tr>
+                    <tr><th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">부서명</th><td style="height:7px;"></td> <td style="height:7px;"></td></tr>
+                    <tr><th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">담당자</th><td style="text-align:right; vertical-align:bottom; font-size:7pt; padding:0 2px; height:7px;">(인)</td><td style="text-align:right; vertical-align:bottom; font-size:7pt; padding:0 2px; height:7px;">(인)</td></tr>
+                    <tr><th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">연락처</th><td style="height:7px;"></td> <td style="height:7px;"></td></tr>
+                    <tr><th style="background:#fff; font-size:7pt; padding:2px 0; height:7px;">발급번호</th><td colspan="2" style="height:7px;"></td></tr>
+                </table>
+            </div>
+
+            <table class="border-top-thick no-side-outer" style="margin-bottom: 10px;">
+                <colgroup><col style="width: 10%;"> <col style="width: 10%;"> <col style="width: 20%;"> <col style="width: 12%;"> <col style="width: 18%;"> <col style="width: 13%;"> <col style="width: 17%;"></colgroup>
+                <tr><th rowspan="2">인적<br>사항</th><th>① 성 명</th><td><div style="display:flex; justify-content:space-between; align-items:center;"><input type="text" id="user_name" style="width:60%;"><span class="nowrap-text" style="font-size:7pt; color:#888;">(서명 또는 인)</span></div></td><th>주민등록번호</th><td><input type="text" id="user_id" class="center-text" oninput="formatNumber(this, 'id')"></td><th class="long-label">휴대전화번호<br>(전화번호)</th><td><input type="tel" id="user_phone" class="center-text" oninput="formatCompPhone(this)" maxlength="12"></td></tr>
+                <tr><th>② 주 소</th><td colspan="3"><input type="text" id="user_addr" oninput="autoFitText(this)"></td><th>전자우편주소</th><td><input type="email" id="user_email"></td></tr>
+            </table>
+
+            <table class="no-side-outer">
+                <colgroup><col style="width: 10%;"> <col style="width: 10%;"> <col style="width: 20%;"> <col style="width: 12%;"> <col style="width: 18%;"> <col style="width: 13%;"> <col style="width: 17%;"></colgroup>
+                <tr class="border-top-thick"><th rowspan="3">소속<br>회사</th><th colspan="2">③ 회사명 및 대표자</th><td colspan="2"><input type="text" id="comp_name" oninput="autoFitText(this)"></td><th class="long-label" style="font-size:7pt;">사업자등록번호<br>(법인등록번호)</th><td><input type="text" id="comp_biz" class="center-text" oninput="formatNumber(this, 'biz')"></td></tr>
+                <tr><th colspan="2">영업소 소재지</th><td colspan="2"><input type="text" id="comp_addr" oninput="autoFitText(this)"></td><th class="long-label">④ 건설업종<br>(등록번호)</th><td><input type="text" id="comp_sector"></td></tr>
+                <tr><td colspan="4" style="padding:0; border-right:1px solid #000;"><div style="display:flex; height:100%; width:100%;"><div style="flex:1; border-right:1px solid #000; background:#e6e6e6; display:flex; align-items:center; justify-content:center; font-size:8.5pt;">⑤ 입사일</div><div style="flex:1; border-right:1px solid #000; padding:0 2px;"><input type="date" id="join_date" required onchange="validateAllDates(1); validateAllDates(2);" onkeydown="return false;"></div><div style="flex:1; border-right:1px solid #000; background:#e6e6e6; display:flex; align-items:center; justify-content:center; font-size:8.5pt;">⑥ 퇴사일</div><div style="flex:1; padding:0 2px; display:flex; align-items:center; justify-content:center;"><input type="date" id="retire_date" required style="width: 100%;" onchange="validateAllDates(1); validateAllDates(2);" onkeydown="return false;"><div id="retire_text" style="display:none; width:100%; text-align:center; font-size:8.5pt;">재직중</div><label class="working-check-label" title="현재 근무 중이면 체크하세요"><input type="checkbox" id="chk_working" onchange="toggleRetireDate()">재직</label></div></div></td><th>전화번호</th><td><input type="tel" id="comp_phone" class="center-text" oninput="formatCompPhone(this)" maxlength="12"></td></tr>
+            </table>
+
+            <div style="text-align:center; font-weight:bold; background:#eaeaea; border:1px solid #000; border-bottom:none; border-left:none; border-right:none; margin-top:5px; height:24px; line-height:24px; font-size:9pt;" class="border-top-thick">기 술 경 력</div>
+
+            <table class="border-bottom-thick no-side-outer">
+                <colgroup><col style="width: 4%;"> <col style="width: 24%;"> <col style="width: 24%;"> <col style="width: 24%;"> <col style="width: 24%;"></colgroup>
+                <tr><th rowspan="5" class="border-bottom-thick">연<br>번</th><th class="left-text">⑦ 사업기간(착공~준공)</th><th colspan="3" class="left-text">⑨ 참여사업명</th></tr>
+                <tr><th class="left-text">⑧ 참여기간(시작~종료)</th><th colspan="3" class="left-text">⑩ 발주자(청)</th></tr>
+                <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><th class="left-text" style="border-left:none; border-top:none;">⑪ 공사종류</th><th class="left-text" style="border-top:none;">⑫ 공사(용역)금액(백만원)</th><th class="left-text" style="border-top:none;">⑬ 직무분야</th><th class="left-text" style="border-top:none; border-right:none;">⑭ 전문분야</th></tr></table></td></tr>
+                <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"style="width:100%; border-collapse: collapse; table-layout: fixed; border: 1px solid #ccc;"><colgroup><col style="width:50%;"><col style="width:18%;"><col style="width:7%;"><col style="width:25%;"></colgroup><tr><th class="left-text" style="border-left:none; border-top:none;">⑮ 공사(용역)개요(150자 이내 빈칸 포함)</th><th class="left-text" style="border-top:none;">⑯ 담당업무</th><th class="left-text" style="border-top:none; font-size: 6.5pt; letter-spacing: -0.5px; padding: 0; line-height: 24px; text-align:center; white-space:nowrap;">⑰ 책임정도</th><th class="left-text" style="border-top:none; border-right:none;">⑱ 직위</th></tr></table></td></tr>
+                <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><th class="left-text" style="border-left:none; border-top:none; border-bottom:1px solid black;">⑲ 적용 공법</th><th class="left-text" style="border-top:none; border-bottom:1px solid black;">⑳ 적용 융ㆍ복합건설기술</th><th class="left-text" style="border-top:none; border-bottom:1px solid black;">㉑ 적용 신기술 등</th><th class="left-text" style="border-top:none; border-bottom:1px solid black; border-right:none;">㉒ 시설물 종류</th></tr></table></td></tr>
+
+                <tr><th rowspan="5" class="border-bottom-thick" style="background:#fff;">1</th><td style="background-color: #f0f0f0 !important; cursor: not-allowed;"></td><td colspan="3" class="tooltip-container"><input type="text" id="proj_name_1" class="left-text e1-req" placeholder="※ 클릭하여 예시를 확인해 주세요!" onfocus="showTooltip(this)" onblur="hideTooltip(this)" oninput="checkEntry1(); checkHeadquarters(1)"><div class="custom-tooltip" id="tooltip_proj_name_1">(예시) 00아파트 기계설비 유지관리, 00건물 기계설비 유지관리, 00빌딩 기계설비 유지관리, 00대학교 기계설비 유지관리</div></td></tr>
+                <tr><td><div style="display:flex;"><input type="date" id="part_start_1" required class="e1-req" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(1)" oninput="checkEntry1()">~<input type="date" id="part_end_1" required class="e1-req" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(1)" oninput="checkEntry1()"></div></td><td colspan="3" style="cursor: not-allowed;"><input type="text" class="left-text" disabled style="cursor: not-allowed;"></td></tr>
+                <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none;"><input type="text" class="left-text" id="amt_1" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; text-align: center;">기계</td><td style="border-top:none; border-right:none; padding-left: 0;"><select id="spec1" class="left-text e1-req" onchange="checkSelectPlaceholder(this); checkEntry1();"><option value="">선택</option></select></td></tr></table></td></tr>
+                <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:50%;"><col style="width:18%;"><col style="width:7%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none;"><select id="task1" class="left-text e1-req" style="font-size: 8pt;" onchange="updateResponsibility(1); checkEntry1(); checkSelectPlaceholder(this);"><option value="">선택</option></select></td><td style="border-top:none; padding-right: 0;"><input type="text" id="resp1" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-right:none; padding-left: 0;"><input type="text" id="pos_1" class="left-text e1-req" oninput="checkEntry1()"></td></tr></table></td></tr>
+                <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none; border-bottom:2px solid black;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-bottom:2px solid black;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-bottom:2px solid black;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-bottom:2px solid black; border-right:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td></tr></table></td></tr>
+
+                <tr class="entry2-row"><th rowspan="5" style="background:#fff;">2</th><td style="background-color: #f0f0f0 !important; cursor: not-allowed;"></td><td colspan="3" class="tooltip-container e2-all"><input type="text" id="proj_name_2" class="left-text e2-req e2-all" placeholder="※ 클릭하여 예시를 확인해 주세요!" onfocus="showTooltip(this)" onblur="hideTooltip(this)" oninput="checkHeadquarters(2); checkEntry2();" disabled><div class="custom-tooltip e2-all" id="tooltip_proj_name_2" style="display: none;">(예시) 00아파트 기계설비 유지관리, 00건물 기계설비 유지관리, 00빌딩 기계설비 유지관리, 00대학교 기계설비 유지관리</div></td></tr>
+                <tr class="entry2-row"><td><div style="display:flex;"><input type="date" id="part_start_2" required class="e2-req e2-all" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(2); checkEntry2();" disabled>~<input type="date" id="part_end_2" required class="e2-req e2-all" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(2); checkEntry2();" disabled></div></td><td colspan="3" style="cursor: not-allowed;"><input type="text" class="left-text" disabled style="cursor: not-allowed;"></td></tr>
+                <tr class="entry2-row"><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; text-align: center;">기계</td><td style="border-top:none; border-right:none; padding-left: 0;"><select id="spec2" class="left-text e2-req e2-all" onchange="checkSelectPlaceholder(this); checkEntry1(); checkEntry2();" disabled><option value="">직무분야 선택 필요</option></select></td></tr></table></td></tr>
+                <tr class="entry2-row"><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:50%;"><col style="width:18%;"><col style="width:7%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none;"><select id="task2" class="left-text e2-req e2-all" style="font-size: 8pt;" onchange="updateResponsibility(2); checkSelectPlaceholder(this); checkEntry2();" disabled><option value="">선택</option></select></td><td style="border-top:none; padding-right: 0;"><input type="text" id="resp2" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-right:none; padding-left: 0;"><input type="text" id="pos_2" class="left-text e2-req e2-all" oninput="checkEntry2()" disabled></td></tr></table></td></tr>
+                <tr class="entry2-row"><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-right:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td></tr></table></td></tr>
+            </table>
+
+            <div class="footer-wrapper">
+                <div style="margin-top: 10px; display:flex; justify-content:space-between; align-items:flex-end;">
+                    <span style="font-size: 10pt; margin-left:5px;">위와 같이 건설기술인의 경력을 확인합니다.</span>
+                    <span style="font-size: 10pt; margin-right:5px;"><input type="tel" style="width:40px; text-align:right;" placeholder="202X">년 <input type="tel" style="width:30px; text-align:right;" placeholder="00">월 <input type="tel" style="width:30px; text-align:right;" placeholder="00">일</span>
+                </div>
+                <div style="position:relative; width:100%; height:50px; text-align:center; margin-top:20px;">
+                    <span style="font-size: 16pt; font-weight: bold; letter-spacing: -1px;">발주자, 인ㆍ허가기관 또는 사용자(대표자)</span>
+                    <div style="position:absolute; right:80px; top:-10px; width:50px; height:50px; display:flex; align-items:center; justify-content:center; color:red; font-weight:bold; border:2px solid red; font-size:10pt;">직인</div>
+                </div>
+
+                <div style="margin-top: 5px;">
+                    <table style="border: 1px solid #000; border-top: 2px solid #000; width:100%; border-bottom: none;">
+                        <tr><th style="background-color:#ccc; height:20px; border-bottom:3px solid #000; font-size:9pt; border-left:none; border-right:none;">유의사항</th></tr>
+                        <tr><td style="padding:10px 10px; font-size:8pt; line-height:1.6; border:none; vertical-align:top; letter-spacing:-0.5px;">1. 기술경력을 설계 또는 건설사업관리 사업수행능력평가에 활용하려는 경우 발주청이나 인ㆍ허가기관 직인의 경력확인서를 제출해야 하며, 입사신고 또는 일반적인 경력신고는 사용자(대표자) 직인의 경력확인서를 제출해야 합니다.<br>2. ⑳ 적용 융ㆍ복합건설기술란, ㉑ 적용 신기술 등란 및 ㉒ 시설물 종류란은 발주청이나 인ㆍ허가기관의 확인이 있는 경우에만 인정됩니다.<br>3. 건설기술인 본인의 서명 또는 날인이 있는 경우에는 건설기술인 경력변경신고서(「건설기술 진흥법 시행규칙」 별지 제14호서식을 말합니다)를 작성하지 않아도 되며, 입ㆍ퇴사일을 신고하는 경우 4대 보험 자료 등 증명할 수 있는 서류를 제출해야 합니다.<br>4. 다수의 경력확인서를 작성해야 하는 경우에는 기술경력만을 적은 서류를 첨부하여 제출할 수 있습니다. 2장 이상은 각 장에 사용자(대표자) 또는 발주자의 확인(간인 포함)을 받아야 합니다.<br>5. 신고인(본인)의 서명 또는 날인은 본인이 직접 해야 하며 타인이 이를 위조하는 경우 「형법」 제239조에 따라 처벌 받을 수 있습니다.</td></tr>
+                    </table>
+                    <table style="border: 1px solid #000; border-top: 1px solid #000; border-bottom:2px solid #000; margin-top:-1px;">
+                        <colgroup><col style="width: 10%;"> <col style="width: 12%;"> <col style="width: 25%;"> <col style="width: 13%;"> <col style="width: 40%;"></colgroup>
+                        <tr><th style="background:#fff; height:24px; border-left:none;">대리인</th><th style="background:#fff;">성명</th><td style="position:relative;"><input type="text" class="center-text"><span style="position:absolute; right:5px; top:5px; color:#aaa; font-size:6pt;">(서명 또는 인)</span></td><th style="background:#fff;">생년월일</th><td style="border-right:none; padding:0;"><div style="display:flex; height:100%;"><input type="tel" style="width:60%; text-align:center;"><span style="border-left:1px solid #000; border-right:1px solid #000; width:100px; background:#fff; display:flex; align-items:center; justify-content:center; font-size:8pt;">연락처</span><input type="tel" style="flex-grow:1; text-align:center;"></div></td></tr>
+                    </table>
                 </div>
             </div>
-
-            <div style="margin-top: 5px;">        
-                <table style="border: 1px solid #000; border-top: 2px solid #000; width:100%; border-bottom: none;">
-                    <tr>
-                        <th style="background-color:#ccc; height:20px; border-bottom:3px solid #000; font-size:9pt; border-left:none; border-right:none;">유의사항</th>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px 10px; font-size:8pt; line-height:1.6; border:none; vertical-align:top; letter-spacing:-0.5px;">
-                            1. 기술경력을 설계 또는 건설사업관리 사업수행능력평가에 활용하려는 경우 발주청이나 인ㆍ허가기관 직인의 경력확인서를 제출해야 하며, 입사신고 또는 일반적인 경력신고는 사용자(대표자) 직인의 경력확인서를 제출해야 합니다.<br>
-                            2. ⑳ 적용 융ㆍ복합건설기술란, ㉑ 적용 신기술 등란 및 ㉒ 시설물 종류란은 발주청이나 인ㆍ허가기관의 확인이 있는 경우에만 인정됩니다.<br>
-                            3. 건설기술인 본인의 서명 또는 날인이 있는 경우에는 건설기술인 경력변경신고서(「건설기술 진흥법 시행규칙」 별지 제14호서식을 말합니다)를 작성하지 않아도 되며, 입ㆍ퇴사일을 신고하는 경우 4대 보험 자료 등 증명할 수 있는 서류를 제출해야 합니다.<br>
-                            4. 다수의 경력확인서를 작성해야 하는 경우에는 기술경력만을 적은 서류를 첨부하여 제출할 수 있습니다. 2장 이상은 각 장에 사용자(대표자) 또는 발주자의 확인(간인 포함)을 받아야 합니다.<br>
-                            5. 신고인(본인)의 서명 또는 날인은 본인이 직접 해야 하며 타인이 이를 위조하는 경우 「형법」 제239조에 따라 처벌 받을 수 있습니다.
-                        </td>
-                    </tr>
-                </table>
-                
-                <table style="border: 1px solid #000; border-top: 1px solid #000; border-bottom:2px solid #000; margin-top:-1px;">
-                    <colgroup>
-                        <col style="width: 10%;"> <col style="width: 12%;"> <col style="width: 25%;"> 
-                        <col style="width: 13%;"> <col style="width: 40%;">
-                    </colgroup>
-                    <tr>
-                        <th style="background:#fff; height:24px; border-left:none;">대리인</th>
-                        <th style="background:#fff;">성명</th>
-                        <td style="position:relative;">
-                            <input type="text" class="center-text">
-                            <span style="position:absolute; right:5px; top:5px; color:#aaa; font-size:6pt;">(서명 또는 인)</span>
-                        </td>
-                        <th style="background:#fff;">생년월일</th>
-                        <td style="border-right:none; padding:0;">
-                            <div style="display:flex; height:100%;">
-                                <input type="tel" style="width:60%; text-align:center;">
-                                <span style="border-left:1px solid #000; border-right:1px solid #000; width:100px; background:#fff; display:flex; align-items:center; justify-content:center; font-size:8pt;">연락처</span>
-                                <input type="tel" style="flex-grow:1; text-align:center;">
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
         </div>
-        </div>
-</div>
+    </div><!-- /zoom-container -->
+</div><!-- /responsive-wrapper -->
 
 <script>
-    /* 1. 반응형 스케일링 스크립트 */
-    function resizeForm() {
-        const wrapper = document.getElementById('responsive-wrapper');
-        const containerWidth = 210 * 3.78; 
-        const containerHeight = 297 * 3.78; 
-        
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
-        const navHeight = 50; 
-        const padding = 10; 
+    /* --- [전역 변수] --- */
+    let isFormModified = false;
 
-        const availableHeight = screenHeight - navHeight - 10; 
-        const scaleX = (screenWidth - padding * 2) / containerWidth;
-        const scaleY = availableHeight / containerHeight;
+    // 반응형 기본 스케일(문서를 화면에 맞추는 스케일)
+    let currentBaseScale = 1;
 
-        let scale = scaleX;
-        
-        if (screenWidth <= 768) { 
-             scale = Math.min(scaleX, scaleY);
-             wrapper.style.marginBottom = "0px";
-        } else {
-             if (screenWidth < containerWidth + (padding * 2)) {
-                 scale = scaleX;
-                 wrapper.style.marginBottom = `-${(1 - scale) * 100}%`;
-             } else {
-                 scale = 1;
-                 wrapper.style.marginBottom = '50px';
-             }
+    // 커스텀 줌 상태(모바일 세로에서만 사용)
+    const zoomState = {
+        enabled: false,
+        userScale: 1,
+        minScale: 1,
+        maxScale: 3,
+        tx: 0,  // screen px 기준
+        ty: 0,  // screen px 기준
+        pointers: new Map(),
+        isPinching: false,
+        isPanning: false,
+        startDist: 0,
+        startUserScale: 1,
+        startTx: 0,
+        startTy: 0,
+        startMid: { x: 0, y: 0 },
+        lastPan: { x: 0, y: 0 }
+    };
+
+    /* --- [이벤트 리스너] --- */
+    window.addEventListener('input', function() { isFormModified = true; });
+    window.addEventListener('change', function() { isFormModified = true; });
+
+    // 브라우저 닫기/새로고침/뒤로가기 시 경고
+    window.addEventListener('beforeunload', function (e) {
+        if (isFormModified) {
+            e.preventDefault();
+            e.returnValue = '작성 중인 내용이 사라집니다.';
         }
-        wrapper.style.transform = `scale(${scale})`;
+    });
+
+    function detectDevice() {
+        const ua = navigator.userAgent;
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+        if (isMobile) { document.body.classList.add('mobile-mode'); }
+        else { document.body.classList.remove('mobile-mode'); }
+        return isMobile;
     }
 
-    window.addEventListener("orientationchange", function() { setTimeout(resizeForm, 200); });
+    /* ------------------------------
+       [커스텀 줌/팬 유틸]
+    ------------------------------ */
+    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 
-    /* 2. 계산기 토글 */
+    function getDistance(p1, p2) {
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        return Math.hypot(dx, dy);
+    }
+
+    function getMidpoint(p1, p2) {
+        return { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+    }
+
+    function resetZoom() {
+        zoomState.userScale = 1;
+        zoomState.tx = 0;
+        zoomState.ty = 0;
+        zoomState.pointers.clear();
+        zoomState.isPinching = false;
+        zoomState.isPanning = false;
+        applyZoomTransform(true);
+    }
+
+    // 경계 보정: 화면 바깥으로 너무 빠지지 않게
+    function constrainPan() {
+        const wrapper = document.getElementById('responsive-wrapper');
+        const zoomEl = document.getElementById('zoom-container');
+        if (!wrapper || !zoomEl) return;
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        // 현재 transform 반영 후 rect 얻기 위해 한번 적용
+        applyZoomTransform(false);
+
+        const rect = zoomEl.getBoundingClientRect();
+        const margin = 10;
+
+        // 좌/우: rect가 화면보다 작으면 중앙에 가까이, 크면 가장자리에서 빈 공간 없게
+        if (rect.width <= vw) {
+            const centerOffsetX = (vw - rect.width) / 2 - rect.left;
+            zoomState.tx += centerOffsetX;
+        } else {
+            if (rect.left > margin) zoomState.tx -= (rect.left - margin);
+            if (rect.right < vw - margin) zoomState.tx += (vw - margin - rect.right);
+        }
+
+        // 상/하:
+        if (rect.height <= vh) {
+            const centerOffsetY = (vh - rect.height) / 2 - rect.top;
+            zoomState.ty += centerOffsetY;
+        } else {
+            if (rect.top > margin) zoomState.ty -= (rect.top - margin);
+            if (rect.bottom < vh - margin) zoomState.ty += (vh - margin - rect.bottom);
+        }
+    }
+
+    function applyZoomTransform(doConstrain = true) {
+        const zoomEl = document.getElementById('zoom-container');
+        if (!zoomEl) return;
+
+        const s = zoomState.userScale;
+
+        // baseScale이 wrapper에 걸려 있으므로,
+        // translate는 화면 px 기준으로 맞추기 위해 baseScale로 보정
+        const tx = zoomState.tx / (currentBaseScale || 1);
+        const ty = zoomState.ty / (currentBaseScale || 1);
+
+        zoomEl.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+
+        if (doConstrain && zoomState.enabled) {
+            // 한 번 더 경계 보정
+            // 무한루프 방지 위해 constrainPan에서 applyZoomTransform(false) 호출하므로 여기서는 직접 호출 X
+            // 대신 constrainPan을 외부에서 호출
+        }
+    }
+
+    function setZoomEnabled(enabled) {
+        zoomState.enabled = enabled;
+        if (enabled) document.body.classList.add('zoom-enabled');
+        else document.body.classList.remove('zoom-enabled');
+
+        // 비활성화 시 상태 리셋
+        if (!enabled) resetZoom();
+    }
+
+    function onPointerDown(e) {
+        if (!zoomState.enabled) return;
+
+        const zoomEl = document.getElementById('zoom-container');
+        if (!zoomEl) return;
+
+        // 버튼/인풋 위에서도 2손가락 핀치는 가능하게 두되, 1손가락은 userScale>1일 때만 팬으로 취급
+        zoomEl.setPointerCapture(e.pointerId);
+        zoomState.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (zoomState.pointers.size === 2) {
+            const pts = Array.from(zoomState.pointers.values());
+            zoomState.isPinching = true;
+            zoomState.isPanning = false;
+
+            zoomState.startDist = getDistance(pts[0], pts[1]);
+            zoomState.startUserScale = zoomState.userScale;
+            zoomState.startTx = zoomState.tx;
+            zoomState.startTy = zoomState.ty;
+            zoomState.startMid = getMidpoint(pts[0], pts[1]);
+        } else if (zoomState.pointers.size === 1) {
+            // 확대 상태에서만 팬 허용(원래 크기에서는 불필요하게 움직이지 않게)
+            if (zoomState.userScale > 1.0001) {
+                zoomState.isPanning = true;
+                zoomState.isPinching = false;
+                zoomState.lastPan = { x: e.clientX, y: e.clientY };
+            } else {
+                zoomState.isPanning = false;
+            }
+        }
+    }
+
+    function onPointerMove(e) {
+        if (!zoomState.enabled) return;
+        if (!zoomState.pointers.has(e.pointerId)) return;
+
+        zoomState.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (zoomState.isPinching && zoomState.pointers.size === 2) {
+            e.preventDefault();
+
+            const pts = Array.from(zoomState.pointers.values());
+            const dist = getDistance(pts[0], pts[1]);
+            const mid = getMidpoint(pts[0], pts[1]);
+
+            const oldScale = zoomState.userScale;
+            const nextScale = clamp(zoomState.startUserScale * (dist / (zoomState.startDist || 1)), zoomState.minScale, zoomState.maxScale);
+            zoomState.userScale = nextScale;
+
+            // 핀치 중심 고정(화면상 mid가 같은 위치를 가리키도록 tx/ty 조정)
+            // tx' = mid.x - (mid.x - tx) * (new/old)
+            // pinch 시작 시점의 tx/ty를 기준으로 계산
+            const ratio = (nextScale / (zoomState.startUserScale || 1));
+            zoomState.tx = zoomState.startMid.x - (zoomState.startMid.x - zoomState.startTx) * ratio;
+            zoomState.ty = zoomState.startMid.y - (zoomState.startMid.y - zoomState.startTy) * ratio;
+
+            applyZoomTransform(false);
+            constrainPan();
+            applyZoomTransform(false);
+        }
+        else if (zoomState.isPanning && zoomState.pointers.size === 1 && zoomState.userScale > 1.0001) {
+            e.preventDefault();
+
+            const dx = e.clientX - zoomState.lastPan.x;
+            const dy = e.clientY - zoomState.lastPan.y;
+            zoomState.lastPan = { x: e.clientX, y: e.clientY };
+
+            zoomState.tx += dx;
+            zoomState.ty += dy;
+
+            applyZoomTransform(false);
+            constrainPan();
+            applyZoomTransform(false);
+        }
+    }
+
+    function onPointerUp(e) {
+        if (!zoomState.enabled) return;
+
+        zoomState.pointers.delete(e.pointerId);
+
+        if (zoomState.pointers.size < 2) {
+            zoomState.isPinching = false;
+        }
+        if (zoomState.pointers.size === 0) {
+            zoomState.isPanning = false;
+
+            // 스케일이 거의 1이면 완전 리셋(미세한 오차 정리)
+            if (zoomState.userScale < 1.02) {
+                resetZoom();
+            } else {
+                // 끝난 후 경계 한번 정리
+                applyZoomTransform(false);
+                constrainPan();
+                applyZoomTransform(false);
+            }
+        }
+    }
+
+    function attachZoomHandlers() {
+        const zoomEl = document.getElementById('zoom-container');
+        if (!zoomEl) return;
+
+        // 중복 등록 방지
+        if (zoomEl.__zoomHandlersAttached) return;
+        zoomEl.__zoomHandlersAttached = true;
+
+        zoomEl.addEventListener('pointerdown', onPointerDown, { passive: false });
+        zoomEl.addEventListener('pointermove', onPointerMove, { passive: false });
+        zoomEl.addEventListener('pointerup', onPointerUp, { passive: false });
+        zoomEl.addEventListener('pointercancel', onPointerUp, { passive: false });
+        zoomEl.addEventListener('pointerleave', onPointerUp, { passive: false });
+    }
+
+    /* ★★★ [JS 핵심] 3단 완전 분리 + (모바일 세로에서만) 커스텀 Zoom 제어 ★★★ */
+    function resizeForm() {
+        const wrapper = document.getElementById('responsive-wrapper');
+        const containerWidth = 794;
+        const containerHeight = 1123 + 80;
+
+        const isMobile = detectDevice();
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const isLandscape = screenWidth > screenHeight;
+
+        // [스타일 초기화]
+        document.body.style.display = '';
+        document.body.style.flexDirection = '';
+        document.body.style.alignItems = '';
+        document.body.style.justifyContent = '';
+        document.body.style.overflow = '';
+        document.body.style.overflowX = '';
+        document.body.style.overflowY = '';
+        document.body.style.padding = '';
+        document.body.style.margin = '';
+
+        wrapper.style.transformOrigin = '';
+        wrapper.style.margin = '';
+        wrapper.style.left = '';
+        wrapper.style.top = '';
+        wrapper.style.height = '';
+
+        // 기본: meta viewport는 항상 줌 잠금(브라우저 줌 사용 X)
+        // (요구 줌은 커스텀 핀치로 구현)
+        const viewportMeta = document.getElementById('viewport-meta');
+        if (viewportMeta) {
+            viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+        }
+
+        /* [Case 1: 모바일 가로 모드 (Landscape)] */
+        if (isMobile && isLandscape) {
+            setZoomEnabled(false); // 가로에서는 커스텀 줌 OFF + 리셋
+
+            document.body.style.display = 'block';
+            document.body.style.overflowY = 'auto';
+            document.body.style.overflowX = 'hidden';
+            document.body.style.margin = '0';
+            document.body.style.padding = '0';
+
+            const scale = screenWidth / containerWidth;
+            currentBaseScale = scale;
+
+            wrapper.style.transform = `scale(${scale})`;
+            wrapper.style.transformOrigin = '0 0';
+            wrapper.style.margin = '0';
+
+            wrapper.style.height = 'auto';
+            document.querySelector('.page-container').style.height = '297mm';
+
+            // 줌 레이어 변환도 기본값 유지
+            applyZoomTransform(false);
+        }
+
+        /* [Case 2: 모바일 세로 모드 (Portrait)] - 커스텀 줌 ON */
+        else if (isMobile && !isLandscape) {
+            setZoomEnabled(true);
+            attachZoomHandlers();
+
+            document.body.style.display = 'flex';
+            document.body.style.flexDirection = 'column';
+            document.body.style.alignItems = 'center';
+            document.body.style.justifyContent = 'center';
+            document.body.style.overflow = 'hidden';
+
+            const padding = 10;
+            const availableWidth = screenWidth - padding;
+            const availableHeight = screenHeight;
+
+            const scaleX = availableWidth / containerWidth;
+            const scaleY = availableHeight / containerHeight;
+            const scale = Math.min(scaleX, scaleY);
+
+            currentBaseScale = scale;
+
+            wrapper.style.transform = `scale(${scale})`;
+            wrapper.style.transformOrigin = 'top center';
+
+            const heightDiff = containerHeight * (1 - scale);
+            wrapper.style.marginBottom = `-${heightDiff}px`;
+
+            // 회전/리사이즈 시 "초기값 복구" 요구: 세로 진입 시 항상 리셋
+            resetZoom();
+        }
+
+        /* [Case 3: PC 모드] */
+        else {
+            setZoomEnabled(false); // PC는 커스텀 줌 OFF
+
+            document.body.style.display = 'flex';
+            document.body.style.flexDirection = 'column';
+            document.body.style.alignItems = 'center';
+            document.body.style.justifyContent = 'center';
+            document.body.style.overflow = 'hidden';
+
+            const padding = 20;
+            const availableWidth = screenWidth - padding;
+            const availableHeight = screenHeight - padding;
+
+            const scaleX = availableWidth / containerWidth;
+            const scaleY = availableHeight / containerHeight;
+            const scale = Math.min(scaleX, scaleY);
+
+            currentBaseScale = scale;
+
+            wrapper.style.transform = `scale(${scale})`;
+            wrapper.style.transformOrigin = 'top center';
+
+            const heightDiff = containerHeight * (1 - scale);
+            wrapper.style.marginBottom = `-${heightDiff}px`;
+
+            applyZoomTransform(false);
+        }
+    }
+
+    window.addEventListener("resize", resizeForm);
+    window.addEventListener("orientationchange", function() {
+        // iOS에서 orientationchange 직후 innerHeight가 잠깐 이상해져서 약간 딜레이
+        setTimeout(resizeForm, 250);
+    });
+
     function toggleCalcPanel() {
         const panel = document.getElementById('calcPanel');
-        if (panel.style.display === 'flex') { panel.style.display = 'none'; } 
+        if (panel.style.display === 'flex') { panel.style.display = 'none'; }
         else { panel.style.display = 'flex'; panel.classList.add('show'); }
     }
 
-    /* 3. 자간 조절 */
     function autoFitText(el) {
         el.style.letterSpacing = 'normal';
         let hiddenSpan = document.getElementById('text-measure-span');
@@ -655,51 +762,44 @@
         hiddenSpan.style.font = computed.font; hiddenSpan.style.fontSize = computed.fontSize;
         hiddenSpan.style.fontFamily = computed.fontFamily; hiddenSpan.style.fontWeight = computed.fontWeight;
         hiddenSpan.innerText = el.value;
-
         const textWidth = hiddenSpan.getBoundingClientRect().width;
-        const availableWidth = el.clientWidth; 
-
+        const availableWidth = el.clientWidth;
         if (textWidth > availableWidth) {
             const length = el.value.length;
             if (length > 1) {
                 const overflow = textWidth - availableWidth;
-                let spacing = -1 * (overflow / (length - 1)) - 0.5; 
-                if (spacing < -3) spacing = -3; 
+                let spacing = -1 * (overflow / (length - 1)) - 0.5;
+                if (spacing < -3) spacing = -3;
                 el.style.letterSpacing = spacing + 'px';
             }
         } else { el.style.letterSpacing = 'normal'; }
     }
 
-    /* 4. 저장 */
     async function saveToFile() {
         const data = {};
         document.querySelectorAll('input, select').forEach(el => {
-            if (el.id) {
-                if(el.type === 'checkbox') data[el.id] = el.checked; else data[el.id] = el.value;
-            }
+            if (el.id) { if(el.type === 'checkbox') data[el.id] = el.checked; else data[el.id] = el.value; }
         });
         const jsonStr = JSON.stringify(data, null, 2);
         const fileName = '기계설비 유지관리자_경력확인서_데이터.json';
-
         if (window.showSaveFilePicker) {
             try {
-                const handle = await window.showSaveFilePicker({
-                    suggestedName: fileName,
-                    types: [{ description: 'JSON Files', accept: { 'application/json': ['.json'] } }],
-                });
+                const handle = await window.showSaveFilePicker({ suggestedName: fileName, types: [{ description: 'JSON Files', accept: { 'application/json': ['.json'] } }] });
                 const writable = await handle.createWritable(); await writable.write(jsonStr); await writable.close();
-                alert('파일이 성공적으로 저장되었습니다.'); return;
+                alert('파일이 성공적으로 저장되었습니다.');
+                isFormModified = false;
+                return;
             } catch (err) { if (err.name === 'AbortError') return; console.error(err); }
         }
         const blob = new Blob([jsonStr], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a'); a.href = url; a.download = fileName;
         document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+        alert('파일이 성공적으로 저장되었습니다.');
+        isFormModified = false;
     }
 
     function triggerFileLoad() { document.getElementById('file_input').click(); }
-
-    /* 5. 불러오기 */
     function loadFromFile(input) {
         const file = input.files[0]; if (!file) return;
         const reader = new FileReader();
@@ -727,9 +827,10 @@
                     if(document.getElementById('spec2')) checkSelectPlaceholder(document.getElementById('spec2'));
                 }
                 updateDayCalculations(); alert("파일 불러오기가 완료되었습니다.");
+                isFormModified = false;
             } catch (err) { alert("파일 형식이 올바르지 않습니다."); }
         };
-        reader.readAsText(file); input.value = ''; 
+        reader.readAsText(file); input.value = '';
     }
 
     function formatNumber(target, type) {
@@ -740,28 +841,24 @@
         else if(type === 'biz' && val.length > 3) result = val.substr(0,3)+'-'+val.substr(3,2)+'-'+val.substr(5);
         target.value = result;
     }
-
     function formatCompPhone(target) {
         let val = target.value.replace(/[^0-9]/g, ''); if(val.length > 12) val = val.substr(0, 12); target.value = val;
     }
 
     function showTooltip(input) {
-        if(input.disabled) return; 
+        if(input.disabled) return;
         const tooltipId = 'tooltip_' + input.id; const tooltip = document.getElementById(tooltipId);
-        if(tooltip) {
-            const container = input.closest('.tooltip-container');
-            if(container) { tooltip.style.display = 'block'; tooltip.style.top = '24px'; tooltip.style.left = '0px'; tooltip.classList.add('show'); }
-        }
+        if(tooltip) tooltip.classList.add('show');
     }
-
     function hideTooltip(input) {
         const tooltipId = 'tooltip_' + input.id; const tooltip = document.getElementById(tooltipId);
-        if(tooltip) { tooltip.classList.remove('show'); }
+        if(tooltip) tooltip.classList.remove('show');
     }
 
     const jobData = { "기계": ["공조냉동 및 설비", "용접"] };
-
     function initAllFields() {
+        detectDevice();
+
         const taskSelects = [document.getElementById('task1'), document.getElementById('task2')];
         const taskOptions = ["유지관리", "유지보수및보강"];
         taskSelects.forEach(select => {
@@ -769,29 +866,42 @@
                 taskOptions.forEach(key => { let option = document.createElement("option"); option.value = key; option.text = key; select.appendChild(option); });
             }
         });
+
         updateSpecialty(1); updateSpecialty(2);
-        const allSelects = document.querySelectorAll('select'); allSelects.forEach(el => checkSelectPlaceholder(el));
+
+        const allSelects = document.querySelectorAll('select');
+        allSelects.forEach(el => checkSelectPlaceholder(el));
+
         checkEntry1();
+        resizeForm();
+
+        // --- [추가된 포커스 시각화 기능 (올바른 위치)] ---
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('focus', function() {
+                this.classList.add('focus-ring-active');
+            });
+            el.addEventListener('blur', function() {
+                this.classList.remove('focus-ring-active');
+            });
+        });
     }
 
     function checkSelectPlaceholder(el) {
         if (!el.value) el.classList.add('empty-value'); else el.classList.remove('empty-value');
     }
-
     function updateSpecialty(idx) {
         const specSelect = document.getElementById('spec' + idx);
         const selectedJob = "기계"; specSelect.innerHTML = '<option value="">선택</option>';
         if (selectedJob && jobData[selectedJob]) {
             jobData[selectedJob].forEach(spec => { let option = document.createElement("option"); option.value = spec; option.text = spec; specSelect.appendChild(option); });
         }
-        checkSelectPlaceholder(specSelect); 
+        checkSelectPlaceholder(specSelect);
     }
-
     function updateResponsibility(idx) { return; }
 
     function toggleRetireDate() {
         const chk = document.getElementById('chk_working'); const dateInput = document.getElementById('retire_date'); const textDiv = document.getElementById('retire_text');
-        if (chk.checked) { dateInput.style.display = 'none'; textDiv.style.display = 'block'; dateInput.value = ''; } 
+        if (chk.checked) { dateInput.style.display = 'none'; textDiv.style.display = 'block'; dateInput.value = ''; }
         else { dateInput.style.display = 'block'; textDiv.style.display = 'none'; }
         validateAllDates(1); validateAllDates(2);
     }
@@ -801,9 +911,8 @@
         const start = new Date(startDateStr); const end = new Date(endDateStr);
         if (start > end) return 0;
         const diffTime = Math.abs(end - start);
-        return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; 
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
     }
-
     function updateDayCalculations() {
         const s1 = document.getElementById('part_start_1').value; const e1 = document.getElementById('part_end_1').value;
         const days1 = calculateDays(s1, e1); document.getElementById('panel_days_1').innerText = days1;
@@ -820,24 +929,20 @@
 
         const joinDate = joinDateEl.value; const retireDate = retireDateEl.value;
         if (!isWorking && joinDate && retireDate && joinDate > retireDate) {
-            alert("입사일/퇴사일: 퇴사일이 입사일보다 앞설 수 없습니다."); document.getElementById('retire_date').value = ""; return;
+            alert("입사일/퇴사일: 퇴사일이 입사일보다 앞설 수 없습니다.");
+            document.getElementById('retire_date').value = "";
+            return;
         }
 
         const partStartEl = document.getElementById('part_start_' + idx); const partEndEl = document.getElementById('part_end_' + idx);
         if (!partStartEl || !partEndEl) return;
 
         const partStart = partStartEl.value; const partEnd = partEndEl.value;
-        if (partStart && partEnd && partStart > partEnd) {
-            alert("참여기간: 종료일이 시작일보다 앞설 수 없습니다."); partEndEl.value = ""; updateDayCalculations(); return;
-        }
-        if (partStart && joinDate && partStart < joinDate) {
-             alert(`참여기간 시작일(${partStart})은 입사일(${joinDate})보다 빠를 수 없습니다.`); partStartEl.value = ""; return;
-        }
-        if (partEnd) {
-            if (!isWorking && retireDate && partEnd > retireDate) {
-                alert(`참여기간 종료일(${partEnd})은 퇴사일(${retireDate})보다 늦을 수 없습니다.`); partEndEl.value = ""; return;
-            }
-        }
+
+        if (partStart && partEnd && partStart > partEnd) { alert("참여기간: 종료일이 시작일보다 앞설 수 없습니다."); partEndEl.value = ""; updateDayCalculations(); return; }
+        if (partStart && joinDate && partStart < joinDate) { alert(`참여기간 시작일(${partStart})은 입사일(${joinDate})보다 빠를 수 없습니다.`); partStartEl.value = ""; return; }
+        if (partEnd) { if (!isWorking && retireDate && partEnd > retireDate) { alert(`참여기간 종료일(${partEnd})은 퇴사일(${retireDate})보다 늦을 수 없습니다.`); partEndEl.value = ""; updateDayCalculations(); return; } }
+
         checkOverlap(); updateDayCalculations();
     }
 
@@ -847,8 +952,9 @@
         if (s1 && e1 && s2 && e2) {
             if (s1 <= e2 && e1 >= s2) {
                 alert("오류: 연번1과 연번2의 참여기간은 겹칠 수 없습니다.\n날짜를 다시 확인해주세요.");
-                document.getElementById('part_start_2').value = ""; document.getElementById('part_end_2').value = "";
-                updateDayCalculations(); 
+                document.getElementById('part_start_2').value = "";
+                document.getElementById('part_end_2').value = "";
+                updateDayCalculations();
             }
         }
     }
@@ -856,68 +962,65 @@
     function checkHeadquarters(idx) {
         const pName = document.getElementById('proj_name_' + idx); const spec = document.getElementById('spec' + idx);
         if (!pName || !spec) return;
-        if (pName.value.trim() === '본사') {
-            spec.innerHTML = '<option value=""></option>'; spec.disabled = true; checkSelectPlaceholder(spec); 
-        } else {
-            if (!pName.disabled) { 
-                spec.disabled = false;
-                if (spec.options.length === 1 && spec.options[0].text === "") updateSpecialty(idx);
-            }
-        }
+        if (pName.value.trim() === '본사') { spec.innerHTML = '<option value=""></option>'; spec.disabled = true; checkSelectPlaceholder(spec); }
+        else { if (!pName.disabled) { spec.disabled = false; if (spec.options.length === 1 && spec.options[0].text === "") updateSpecialty(idx); } }
     }
 
     function checkEntry2() {
         const requiredFields2 = document.querySelectorAll('.e2-req');
         requiredFields2.forEach(el => {
-            if (!el.disabled) { 
-                if (!el.value.trim()) el.classList.add('required-missing'); else el.classList.remove('required-missing'); 
-            } else { el.classList.remove('required-missing'); }
+            if (!el.disabled) {
+                if (!el.value.trim()) el.classList.add('required-missing'); else el.classList.remove('required-missing');
+            } else {
+                el.classList.remove('required-missing');
+            }
         });
     }
 
     function checkEntry1() {
         const requiredFields1 = document.querySelectorAll('.e1-req');
-        let allFilled = true; let isCompletelyEmpty = true; 
+        let allFilled = true; let isCompletelyEmpty = true;
         requiredFields1.forEach(el => {
             if (el.value.trim()) { isCompletelyEmpty = false; el.classList.remove('required-missing'); }
             else { allFilled = false; el.classList.add('required-missing'); }
         });
 
-        const entry2Rows = document.querySelectorAll('.entry2-row');
-        const entry2Inputs = document.querySelectorAll('.e2-all');
+        const entry2Rows = document.querySelectorAll('.entry2-row'); const entry2Inputs = document.querySelectorAll('.e2-all');
         const alertMsg = "연번1의 필수값(참여기간, 사업명, 직무분야, 전문분야, 담당업무, 직위)을 모두 입력해주세요.";
 
         if (allFilled) {
             entry2Inputs.forEach(el => el.disabled = false);
-            entry2Rows.forEach(row => row.removeAttribute('title')); 
-            const tooltip2 = document.getElementById('tooltip_proj_name_2');
-            if(tooltip2) tooltip2.style.display = 'block';
+            entry2Rows.forEach(row => row.removeAttribute('title'));
+            const tooltip2 = document.getElementById('tooltip_proj_name_2'); if(tooltip2) tooltip2.style.display = 'block';
             checkHeadquarters(2); checkEntry2();
         } else {
-            entry2Inputs.forEach(el => {
-                el.disabled = true; el.value = ""; el.classList.remove('required-missing'); 
-                if(el.tagName === 'SELECT') checkSelectPlaceholder(el);
-            });
-            entry2Rows.forEach(row => row.setAttribute('title', alertMsg)); 
-            const tooltip2 = document.getElementById('tooltip_proj_name_2');
-            if(tooltip2) tooltip2.style.display = 'none';
+            entry2Inputs.forEach(el => { el.disabled = true; el.value = ""; el.classList.remove('required-missing'); if(el.tagName === 'SELECT') checkSelectPlaceholder(el); });
+            entry2Rows.forEach(row => row.setAttribute('title', alertMsg));
+            const tooltip2 = document.getElementById('tooltip_proj_name_2'); if(tooltip2) tooltip2.style.display = 'none';
             updateDayCalculations();
         }
         return { allFilled, isCompletelyEmpty };
     }
 
     function validateAndPrint() {
-        // [모바일 환경 체크]
-        const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (isMobile) {
-            alert("PC에서 출력해 주시기 바랍니다.");
-            return; 
-        }
+        const isMobile = detectDevice();
+        if (isMobile) { alert("PC에서 출력해 주시기 바랍니다."); return; }
 
         const status1 = checkEntry1();
+
         if (status1.isCompletelyEmpty) { window.print(); return; }
+
+        const highlightError = (element) => {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            element.focus();
+            element.classList.add('shake-effect');
+            setTimeout(() => { element.classList.remove('shake-effect'); }, 400);
+        };
+
         if (!status1.allFilled) {
             alert("연번1의 필수값(참여기간, 사업명, 직무분야, 전문분야, 담당업무, 직위)을 모두 입력해주세요.");
+            const missingEl = document.querySelector('.e1-req.required-missing');
+            if (missingEl) { highlightError(missingEl); }
             return;
         }
 
@@ -932,14 +1035,17 @@
                 if (!el.value.trim()) { allFilled2 = false; el.classList.add('required-missing'); }
                 else { el.classList.remove('required-missing'); }
             });
+
             if (!allFilled2) {
-                alert("연번2를 작성 중입니다. 연번2의 필수값을 모두 입력해주세요.\n(입력하지 않으려면 연번2 내용을 모두 지워주세요)");
+                alert("연번2를 작성 중입니다. 필수값을 모두 입력해주세요.\n(입력하지 않으려면 연번2 내용을 모두 지워주세요)");
+                const missingEl2 = document.querySelector('.e2-req.required-missing');
+                if (missingEl2) { highlightError(missingEl2); }
                 return;
             }
         }
+
         window.print();
     }
 </script>
-
 </body>
 </html>
