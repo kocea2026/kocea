@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>기계설비 유지관리자 경력확인서 (최종 수정)</title>
+<title>기계설비 유지관리자 경력확인서</title>
 <style>
     /* --- [1. 기본 레이아웃 설정] --- */
     :root {
@@ -347,7 +347,41 @@
         display: none !important;
     }
 }
+/* --- [10. 모바일 전용 툴팁(Toast) 및 터치 보정] --- */
+    /* 모바일에서 비활성(disabled) 요소의 터치 이벤트를 부모(td)로 통과시킴 */
+    body.mobile-mode input:disabled, 
+    body.mobile-mode select:disabled, 
+    body.mobile-mode textarea:disabled {
+        pointer-events: none; 
+    }
 
+    /* 토스트 메시지 박스 스타일 */
+    #mobile-toast-msg {
+        position: fixed;
+        bottom: 15%; /* 화면 하단 위치 */
+        left: 50%;
+        transform: translate(-50%, 0);
+        background-color: rgba(0, 0, 0, 0.85); /* 짙은 검정 반투명 */
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 10pt;
+        font-weight: normal;
+        text-align: center;
+        z-index: 99999;
+        pointer-events: none; /* 메시지가 터치를 방해하지 않도록 */
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        width: max-content;
+        max-width: 80%;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        word-break: keep-all;
+    }
+    
+    #mobile-toast-msg.show {
+        opacity: 1;
+        transform: translate(-50%, -10px); /* 살짝 위로 떠오르는 효과 */
+    }
 </style>
 </head>
 <body onload="initAllFields();" onresize="resizeForm()">
@@ -433,27 +467,42 @@
             <div style="text-align:center; font-weight:bold; background:#eaeaea; border:1px solid #000; border-bottom:none; border-left:none; border-right:none; margin-top:5px; height:24px; line-height:24px; font-size:9pt;" class="border-top-thick">기 술 경 력</div>
 
             <table class="border-bottom-thick no-side-outer">
-                <colgroup><col style="width: 4%;"> <col style="width: 24%;"> <col style="width: 24%;"> <col style="width: 24%;"> <col style="width: 24%;"></colgroup>
-                <tr><th rowspan="5" class="border-bottom-thick">연<br>번</th><th class="left-text">⑦ 사업기간(착공~준공)</th><th colspan="3" class="left-text">⑨ 참여사업명</th></tr>
+                <colgroup>
+    <col style="width: 8mm;"> 
+    <col style="width: 43mm;"> 
+    <col style="width: 43mm;"> 
+    <col style="width: 43mm;"> 
+    <col style="width: 43mm;">
+</colgroup>
+                <tr><th rowspan="5">연<br>번</th><th class="left-text">⑦ 사업기간(착공~준공)</th><th colspan="3" class="left-text">⑨ 참여사업명</th></tr>
                 <tr><th class="left-text">⑧ 참여기간(시작~종료)</th><th colspan="3" class="left-text">⑩ 발주자(청)</th></tr>
-                <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><th class="left-text" style="border-left:none; border-top:none;">⑪ 공사종류</th><th class="left-text" style="border-top:none;">⑫ 공사(용역)금액(백만원)</th><th class="left-text" style="border-top:none;">⑬ 직무분야</th><th class="left-text" style="border-top:none; border-right:none;">⑭ 전문분야</th></tr></table></td></tr>
+                <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup>
+    <col style="width: 43mm;">
+    <col style="width: 43mm;">
+    <col style="width: 43mm;">
+    <col style="width: 43mm;">
+</colgroup><tr><th class="left-text" style="border-left:none; border-top:none;">⑪ 공사종류</th><th class="left-text" style="border-top:none;">⑫ 공사(용역)금액(백만원)</th><th class="left-text" style="border-top:none;">⑬ 직무분야</th><th class="left-text" style="border-top:none; border-right:none;">⑭ 전문분야</th></tr></table></td></tr>
                 <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"style="width:100%; border-collapse: collapse; table-layout: fixed; border: 1px solid #ccc;"><colgroup><col style="width:50%;"><col style="width:18%;"><col style="width:7%;"><col style="width:25%;"></colgroup><tr><th class="left-text" style="border-left:none; border-top:none;">⑮ 공사(용역)개요(150자 이내 빈칸 포함)</th><th class="left-text" style="border-top:none;">⑯ 담당업무</th><th class="left-text" style="border-top:none; font-size: 6.5pt; letter-spacing: -0.5px; padding: 0; line-height: 24px; text-align:center; white-space:nowrap;">⑰ 책임정도</th><th class="left-text" style="border-top:none; border-right:none;">⑱ 직위</th></tr></table></td></tr>
-                <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><th class="left-text" style="border-left:none; border-top:none; border-bottom:1px solid black;">⑲ 적용 공법</th><th class="left-text" style="border-top:none; border-bottom:1px solid black;">⑳ 적용 융ㆍ복합건설기술</th><th class="left-text" style="border-top:none; border-bottom:1px solid black;">㉑ 적용 신기술 등</th><th class="left-text" style="border-top:none; border-bottom:1px solid black; border-right:none;">㉒ 시설물 종류</th></tr></table></td></tr>
+ <tr>
+    <td colspan="4" style="padding:0; border:none; border-bottom: 0.5px solid black;">
+        <table style="width:100%; border:none;">            
+<colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><th class="left-text" style="border-left:none; border-top:none; border-bottom:1px solid black;">⑲ 적용 공법</th><th class="left-text" style="border-top:none; border-bottom:1px solid black;">⑳ 적용 융ㆍ복합건설기술</th><th class="left-text" style="border-top:none; border-bottom:1px solid black;">㉑ 적용 신기술 등</th><th class="left-text" style="border-top:none; border-bottom:1px solid black; border-right:none;">㉒ 시설물 종류</th></tr></table></td></tr>
 
-                <tr><th rowspan="5" class="border-bottom-thick" style="background:#fff;">1</th><td style="background-color: #f0f0f0 !important; cursor: not-allowed;"></td><td colspan="3" class="tooltip-container"><input type="text" id="proj_name_1" class="left-text e1-req" placeholder="※ 클릭하여 예시를 확인해 주세요!" onfocus="showTooltip(this)" onblur="hideTooltip(this)" oninput="checkEntry1(); checkHeadquarters(1)"><div class="custom-tooltip" id="tooltip_proj_name_1">(예시) 00아파트 기계설비 유지관리, 00건물 기계설비 유지관리, 00빌딩 기계설비 유지관리, 00대학교 기계설비 유지관리</div></td></tr>
+                <tr><th rowspan="5"  style="background:#fff;">1</th><td style="background-color: #f0f0f0 !important; cursor: not-allowed;"></td><td colspan="3" class="tooltip-container"><input type="text" id="proj_name_1" class="left-text e1-req" placeholder="※ 클릭하여 예시를 확인해 주세요!" onfocus="showTooltip(this)" onblur="hideTooltip(this)" oninput="checkEntry1(); checkHeadquarters(1)"><div class="custom-tooltip" id="tooltip_proj_name_1">(예시) 00아파트 기계설비 유지관리, 00건물 기계설비 유지관리, 00빌딩 기계설비 유지관리, 00대학교 기계설비 유지관리</div></td></tr>
                 <tr><td><div style="display:flex;"><input type="date" id="part_start_1" required class="e1-req" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(1)" oninput="checkEntry1()">~<input type="date" id="part_end_1" required class="e1-req" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(1)" oninput="checkEntry1()"></div></td><td colspan="3" style="cursor: not-allowed;"><input type="text" class="left-text" disabled style="cursor: not-allowed;"></td></tr>
                 <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none;"><input type="text" class="left-text" id="amt_1" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; text-align: center;">기계</td><td style="border-top:none; border-right:none; padding-left: 0;"><select id="spec1" class="left-text e1-req" onchange="checkSelectPlaceholder(this); checkEntry1();"><option value="">선택</option></select></td></tr></table></td></tr>
                 <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:50%;"><col style="width:18%;"><col style="width:7%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none;"><select id="task1" class="left-text e1-req" style="font-size: 8pt;" onchange="updateResponsibility(1); checkEntry1(); checkSelectPlaceholder(this);"><option value="">선택</option></select></td><td style="border-top:none; padding-right: 0;"><input type="text" id="resp1" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-right:none; padding-left: 0;"><input type="text" id="pos_1" class="left-text e1-req" oninput="checkEntry1()"></td></tr></table></td></tr>
                 <tr><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none; border-bottom:2px solid black;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-bottom:2px solid black;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-bottom:2px solid black;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-bottom:2px solid black; border-right:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td></tr></table></td></tr>
 
-                <tr class="entry2-row"><th rowspan="5" style="background:#fff; vertical-align: middle; padding: 5px 0; overflow:visible; position:relative;">
+                <tr class="entry2-row">
+<th rowspan="5" style="border-top: 2px solid black; background:#fff; vertical-align: middle; padding: 5px 0; overflow:visible; position:relative;">
         <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%;">
             
             <span style="font-size:10pt; font-weight:bold;">2</span>
             
             <div class="quest-btn" style="margin-top:4px;" onclick="toggleInfoBox('info_pill_2')">?</div>
             
-           <div id="info_pill_2" class="gradient-pill-popup" style="top: 40px; margin-left: 30px;">
+           <div id="info_pill_2" class="gradient-pill-popup" style="top: 40px; margin-left: 50px;">
     ※ 연번1의 필수값을 채우시면 활성화 됩니다.
 </div>
  
@@ -461,7 +510,7 @@
         </div>
     </th>
 
-<td style="background-color: #f0f0f0 !important; cursor: not-allowed;"></td><td colspan="3" class="tooltip-container e2-all"><input type="text" id="proj_name_2" class="left-text e2-req e2-all" placeholder="※ 클릭하여 예시를 확인해 주세요!" onfocus="showTooltip(this)" onblur="hideTooltip(this)" oninput="checkHeadquarters(2); checkEntry2();" disabled><div class="custom-tooltip e2-all" id="tooltip_proj_name_2" style="display: none;">(예시) 00아파트 기계설비 유지관리, 00건물 기계설비 유지관리, 00빌딩 기계설비 유지관리, 00대학교 기계설비 유지관리</div></td></tr>
+<td style="background-color: #f0f0f0 !important; cursor: not-allowed;"></td><td colspan="3" class="tooltip-container e2-all"><input type="text" id="proj_name_2" class="left-text e2-req e2-all" placeholder="" onfocus="showTooltip(this)" onblur="hideTooltip(this)" oninput="checkHeadquarters(2); checkEntry2();" disabled><div class="custom-tooltip e2-all" id="tooltip_proj_name_2" style="display: none;">(예시) 00아파트 기계설비 유지관리, 00건물 기계설비 유지관리, 00빌딩 기계설비 유지관리, 00대학교 기계설비 유지관리</div></td></tr>
                 <tr class="entry2-row"><td><div style="display:flex;"><input type="date" id="part_start_2" required class="e2-req e2-all" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(2); checkEntry2();" disabled>~<input type="date" id="part_end_2" required class="e2-req e2-all" style="width:48%;" onkeydown="return false;" onchange="validateAllDates(2); checkEntry2();" disabled></div></td><td colspan="3" style="cursor: not-allowed;"><input type="text" class="left-text" disabled style="cursor: not-allowed;"></td></tr>
                 <tr class="entry2-row"><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; text-align: center;">기계</td><td style="border-top:none; border-right:none; padding-left: 0;"><select id="spec2" class="left-text e2-req e2-all" onchange="checkSelectPlaceholder(this); checkEntry1(); checkEntry2();" disabled><option value="">직무분야 선택 필요</option></select></td></tr></table></td></tr>
                 <tr class="entry2-row"><td colspan="4" style="padding:0; border:none;"><table style="width:100%; border:none;"><colgroup><col style="width:50%;"><col style="width:18%;"><col style="width:7%;"><col style="width:25%;"></colgroup><tr><td style="border-left:none; border-top:none;"><input type="text" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none;"><select id="task2" class="left-text e2-req e2-all" style="font-size: 8pt;" onchange="updateResponsibility(2); checkSelectPlaceholder(this); checkEntry2();" disabled><option value="">선택</option></select></td><td style="border-top:none; padding-right: 0;"><input type="text" id="resp2" class="left-text" disabled title="유지관리자는 해당 사항 없습니다."></td><td style="border-top:none; border-right:none; padding-left: 0;"><input type="text" id="pos_2" class="left-text e2-req e2-all" oninput="checkEntry2()" disabled></td></tr></table></td></tr>
@@ -990,7 +1039,7 @@ function toggleInfoBox(boxId) {
     const jobData = { "기계": ["공조냉동 및 설비", "용접"] };
     function initAllFields() {
         detectDevice();
-
+	initMobileTooltipSystem();
         const taskSelects = [document.getElementById('task1'), document.getElementById('task2')];
         const taskOptions = ["유지관리", "유지보수및보강"];
         taskSelects.forEach(select => {
@@ -1119,18 +1168,35 @@ function toggleInfoBox(boxId) {
 
         const entry2Rows = document.querySelectorAll('.entry2-row'); const entry2Inputs = document.querySelectorAll('.e2-all');
         const alertMsg = "연번1의 필수값(참여기간, 사업명, 직무분야, 전문분야, 담당업무, 직위)을 모두 입력해주세요.";
-
-        if (allFilled) {
+if (allFilled) {
             entry2Inputs.forEach(el => el.disabled = false);
             entry2Rows.forEach(row => row.removeAttribute('title'));
-            const tooltip2 = document.getElementById('tooltip_proj_name_2'); if(tooltip2) tooltip2.style.display = 'block';
+            
+            const tooltip2 = document.getElementById('tooltip_proj_name_2'); 
+            if(tooltip2) tooltip2.style.display = 'block';
+
+            // [추가] 활성화되면 안내 문구(Placeholder) 넣기
+            document.getElementById('proj_name_2').placeholder = "※ 클릭하여 예시를 확인해 주세요!";
+            
             checkHeadquarters(2); checkEntry2();
         } else {
-            entry2Inputs.forEach(el => { el.disabled = true; el.value = ""; el.classList.remove('required-missing'); if(el.tagName === 'SELECT') checkSelectPlaceholder(el); });
+            entry2Inputs.forEach(el => { 
+                el.disabled = true; 
+                el.value = ""; 
+                el.classList.remove('required-missing'); 
+                if(el.tagName === 'SELECT') checkSelectPlaceholder(el); 
+            });
             entry2Rows.forEach(row => row.setAttribute('title', alertMsg));
-            const tooltip2 = document.getElementById('tooltip_proj_name_2'); if(tooltip2) tooltip2.style.display = 'none';
+            
+            const tooltip2 = document.getElementById('tooltip_proj_name_2'); 
+            if(tooltip2) tooltip2.style.display = 'none';
+
+            // [추가] 비활성화되면 안내 문구(Placeholder) 제거 (빈 칸으로 만들기)
+            document.getElementById('proj_name_2').placeholder = "";
+            
             updateDayCalculations();
         }
+  
         return { allFilled, isCompletelyEmpty };
     }
 
@@ -1178,9 +1244,66 @@ function toggleInfoBox(boxId) {
 
         window.print();
     }
+/* --- [모바일 터치 툴팁 기능] --- */
+    let toastTimer = null;
+
+    function initMobileTooltipSystem() {
+        // 1. 모바일 기기가 아니면 실행하지 않음 (PC는 기본 title 속성 사용)
+        if (!detectDevice()) return;
+
+        // 2. 토스트 메시지용 div 생성 (없으면 생성)
+        if (!document.getElementById('mobile-toast-msg')) {
+            const toastDiv = document.createElement('div');
+            toastDiv.id = 'mobile-toast-msg';
+            document.body.appendChild(toastDiv);
+        }
+
+        // 3. 화면 전체에 터치 리스너 등록 (이벤트 위임 방식)
+        // 비활성(disabled) 입력창은 CSS pointer-events: none 덕분에 
+        // 터치 시 부모 요소(TD)가 클릭된 것으로 인식됩니다.
+        document.addEventListener('click', function(e) {
+            let target = e.target;
+            let titleText = null;
+
+            // (1) 터치한 요소가 직접 title을 가진 경우 (활성 입력창 등)
+            if (target.getAttribute('title')) {
+                titleText = target.getAttribute('title');
+            } 
+            // (2) 터치한 요소의 자식(input)이 title을 가진 경우 (비활성 입력창 -> TD 클릭됨)
+            else {
+                // TD를 클릭했는지 확인하고, 그 안의 input/select를 찾음
+                const childInput = target.querySelector ? target.querySelector('input, select, textarea') : null;
+                if (childInput && childInput.getAttribute('title')) {
+                    titleText = childInput.getAttribute('title');
+                }
+            }
+
+            // (3) title 텍스트가 발견되면 토스트 메시지 출력
+            if (titleText) {
+                showMobileToast(titleText);
+            }
+        });
+    }
+
+    function showMobileToast(msg) {
+        const toast = document.getElementById('mobile-toast-msg');
+        if (!toast) return;
+
+        toast.innerHTML = msg; // 내용 설정
+        toast.classList.add('show');
+
+        // 기존 타이머 취소 (연속 터치 시 깜빡임 방지)
+        if (toastTimer) clearTimeout(toastTimer);
+
+        // 2.5초 뒤에 자동으로 사라짐
+        toastTimer = setTimeout(function() {
+            toast.classList.remove('show');
+        }, 2500);
+    }
 </script>
 </body>
 </html>
+
 
 
 
