@@ -264,7 +264,7 @@
         let scale = 1.0;
         if (width < 1024) { 
              if(height < 500) scale = 0.45; 
-             else scale = width / 1100; 
+             else scale = (width / 1100) * 0.5; 
         } else { 
             scale = (width / 1500) * 0.5;
         }
@@ -310,6 +310,7 @@
 </script>
 </body>
 </html>
+
 
 
 
